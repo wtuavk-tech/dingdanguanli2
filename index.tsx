@@ -498,7 +498,7 @@ const FilterContainer = ({
   isSearchOpen,
   extraButtons 
 }: { 
-  children: React.ReactNode; 
+  children?: React.ReactNode; 
   onToggleSearch: () => void; 
   isSearchOpen: boolean;
   extraButtons?: React.ReactNode
@@ -1613,7 +1613,7 @@ const Pagination = ({ total, current, pageSize, onPageChange, onSizeChange }: an
   );
 };
 
-const ModalOverlay = ({ children, onClose }: { children: React.ReactNode; onClose: () => void }) => {
+const ModalOverlay = ({ children, onClose }: { children?: React.ReactNode; onClose: () => void }) => {
   return createPortal(
     <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="absolute inset-0" onClick={onClose} />
@@ -2015,7 +2015,7 @@ const App = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-200 to-slate-300 p-6 flex flex-col overflow-hidden">
+    <div className="h-screen bg-gradient-to-br from-slate-200 to-slate-300 px-[12px] py-6 flex flex-col overflow-hidden">
       <style>{`
         /* 1. 全局单元格层级重置 */
         td, th {
@@ -2065,7 +2065,7 @@ const App = () => {
           right: 0px !important;
         }
       `}</style>
-      <div className="max-w-[1800px] mx-auto w-full flex-1 flex flex-col h-full">
+      <div className="w-full flex-1 flex flex-col h-full">
         <NotificationBar />
         <QuickNav activeTab={activeTab} onTabChange={setActiveTab} />
         {renderContent()}
