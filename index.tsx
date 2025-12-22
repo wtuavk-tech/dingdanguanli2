@@ -1464,42 +1464,109 @@ const ActionBar = ({
 const SearchPanel = ({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) => {
   if (!isOpen) return null;
   return (
-    <div className="bg-white border border-blue-100 rounded-lg p-4 mb-4 shadow-sm animate-in fade-in slide-in-from-top-2">
-      <div className="grid grid-cols-6 gap-4 mb-4">
-        {/* Simplified search fields for demo */}
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">订单号/手机号</label>
-          <input type="text" className="w-full border border-gray-200 rounded h-8 px-2 text-xs focus:border-blue-500 outline-none" placeholder="输入关键词..." />
+    <div className="bg-[#F0F7FF] border border-blue-200 rounded-lg p-3 mb-3 shadow-sm animate-in fade-in slide-in-from-top-2">
+      <div className="flex flex-wrap gap-y-3 items-center">
+        {/* Row 1 */}
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-12 text-right mr-2">关键词</label>
+           <input className="w-32 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="订单号/手机/客户..." />
         </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">服务项目</label>
-          <select className="w-full border border-gray-200 rounded h-8 px-2 text-xs focus:border-blue-500 outline-none">
-            <option>全部</option>
-            <option>空调清洗</option>
-            <option>冰箱维修</option>
-          </select>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">分机</label>
+           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
         </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">订单状态</label>
-          <select className="w-full border border-gray-200 rounded h-8 px-2 text-xs focus:border-blue-500 outline-none">
-            <option>全部</option>
-            <option>待派单</option>
-            <option>已完成</option>
-          </select>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-12 text-right mr-2">创建人</label>
+           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
         </div>
-         <div className="space-y-1">
-          <label className="text-xs font-medium text-slate-500">日期范围</label>
-          <div className="flex items-center gap-1">
-             <input type="date" className="w-full border border-gray-200 rounded h-8 px-1 text-[10px]" />
-             <span className="text-slate-400">-</span>
-             <input type="date" className="w-full border border-gray-200 rounded h-8 px-1 text-[10px]" />
-          </div>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">项目</label>
+           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="服务项目..." />
         </div>
-      </div>
-      <div className="flex justify-end gap-2 border-t border-slate-50 pt-3">
-        <button onClick={onToggle} className="px-4 py-1.5 text-xs text-slate-500 hover:text-slate-700">收起</button>
-        <button className="px-4 py-1.5 text-xs border border-gray-200 rounded hover:bg-gray-50">重置</button>
-        <button className="px-6 py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 shadow-sm shadow-blue-200">查询</button>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">地域</label>
+           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
+        </div>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">状态</label>
+           <select className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none bg-white">
+             <option>全部</option>
+             <option>待派单</option>
+             <option>已完成</option>
+             <option>作废</option>
+           </select>
+        </div>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">来源</label>
+           <select className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none bg-white">
+             <option>全部</option>
+             <option>美团</option>
+             <option>58同城</option>
+           </select>
+        </div>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">方式</label>
+           <select className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none bg-white">
+             <option>全部</option>
+           </select>
+        </div>
+        <div className="flex items-center">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">补款</label>
+           <select className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none bg-white">
+             <option>全部</option>
+           </select>
+        </div>
+
+        {/* Row 2 */}
+        <div className="w-full h-0"></div> {/* Force break */}
+
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-12 text-right mr-2">工作机</label>
+           <input className="w-32 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
+        </div>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-10 text-right mr-2">派单员</label>
+           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
+        </div>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">师傅</label>
+           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
+        </div>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-20 text-right mr-2">线下师傅手机</label>
+           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
+        </div>
+        <div className="flex items-center mr-4">
+           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">比例</label>
+           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
+        </div>
+        
+        {/* Date Group with attached select */}
+        <div className="flex items-center mr-4">
+           <div className="flex rounded border border-gray-300 bg-white overflow-hidden h-8">
+             <select className="h-full px-2 text-xs focus:outline-none bg-white border-r border-gray-200 text-slate-700 font-bold min-w-[80px]">
+               <option>创建时间</option>
+               <option>完成时间</option>
+               <option>收款时间</option>
+               <option>服务时间</option>
+             </select>
+             <div className="flex items-center px-2">
+                <Calendar size={14} className="text-slate-400 mr-2" />
+                <input type="text" className="w-28 text-xs outline-none text-slate-600" placeholder="年 / 月 / 日 --:--" />
+                <span className="text-slate-400 mx-1">-</span>
+                <input type="text" className="w-28 text-xs outline-none text-slate-600" placeholder="年 / 月 / 日 --:--" />
+             </div>
+           </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex items-center gap-2 ml-auto">
+           <button className="px-4 h-8 bg-white border border-gray-300 rounded text-xs text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">重置</button>
+           <button className="px-5 h-8 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 flex items-center gap-1 shadow-sm shadow-blue-200 transition-colors">
+             <Search size={13} />
+             搜索
+           </button>
+        </div>
       </div>
     </div>
   );
