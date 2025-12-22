@@ -421,17 +421,23 @@ const FULL_MOCK_DATA = generateMockData();
 
 const NotificationBar = () => {
   return (
-    <div className="mb-3 bg-orange-50 border border-orange-100 rounded-lg px-4 py-2 flex items-center gap-3 overflow-hidden relative">
-      <div className="flex items-center gap-1.5 text-orange-600 font-bold whitespace-nowrap z-10 bg-orange-50 pr-2">
-        <Megaphone size={16} className="animate-pulse" />
-        <span className="text-xs">通知公告</span>
+    <div className="mb-3 bg-[#111827] rounded-md px-4 py-2.5 flex items-center gap-4 overflow-hidden relative shadow-sm border border-slate-800">
+      <div className="flex items-center gap-1.5 bg-[#EF4444] text-white px-2 py-0.5 rounded text-xs font-bold whitespace-nowrap flex-shrink-0">
+        <span>重要公告</span>
+        <Bell size={12} fill="currentColor" />
       </div>
-      <div className="flex-1 overflow-hidden relative h-5 group">
-        <div className="absolute whitespace-nowrap animate-marquee group-hover:pause-animation text-xs text-orange-800 flex items-center">
-          <span className="mr-8">📢 系统升级通知：今晚 24:00 将进行系统维护，预计耗时 30 分钟。</span>
-          <span className="mr-8">🔥 10月业绩pk赛圆满结束，恭喜华东大区获得冠军！</span>
-          <span className="mr-8">⚠️ 请各位接单员注意：近期客户反馈电话未接通率较高，请保持电话畅通。</span>
+      <div className="flex-1 overflow-hidden relative h-5 group flex items-center">
+        <Megaphone size={16} className="text-[#EF4444] mr-3 flex-shrink-0" />
+        <div className="flex-1 overflow-hidden relative h-full">
+          <div className="absolute whitespace-nowrap animate-marquee group-hover:pause-animation text-xs text-gray-300 flex items-center h-full font-medium">
+            <span className="mr-16">关于 2025 年度秋季职级晋升评审的通知：点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。</span>
+            <span className="mr-16">📢 系统升级通知：今晚 24:00 将进行系统维护，预计耗时 30 分钟。</span>
+            <span className="mr-16">🔥 10月业绩pk赛圆满结束，恭喜华东大区获得冠军！</span>
+          </div>
         </div>
+      </div>
+      <div className="text-slate-400 text-xs font-medium bg-slate-800 px-2 py-0.5 rounded border border-slate-700 whitespace-nowrap">
+        2025-11-19
       </div>
       <style>{`
         @keyframes marquee {
