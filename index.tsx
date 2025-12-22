@@ -429,7 +429,7 @@ const NotificationBar = () => {
       <div className="flex-1 overflow-hidden relative h-5 group flex items-center">
         <Megaphone size={16} className="text-[#EF4444] mr-3 flex-shrink-0" />
         <div className="flex-1 overflow-hidden relative h-full">
-          <div className="absolute whitespace-nowrap animate-marquee group-hover:pause-animation text-xs text-gray-300 flex items-center h-full font-medium">
+          <div className="absolute whitespace-nowrap animate-marquee text-xs text-gray-300 flex items-center h-full font-medium">
             <span className="mr-16">关于 2025 年度秋季职级晋升评审的通知：点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。</span>
             <span className="mr-16">📢 系统升级通知：今晚 24:00 将进行系统维护，预计耗时 30 分钟。</span>
             <span className="mr-16">🔥 10月业绩pk赛圆满结束，恭喜华东大区获得冠军！</span>
@@ -443,6 +443,12 @@ const NotificationBar = () => {
         @keyframes marquee {
           0% { transform: translateX(100%); }
           100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
+        }
+        .group:hover .animate-marquee {
+          animation-play-state: paused;
         }
       `}</style>
     </div>
@@ -1171,7 +1177,7 @@ const DirectDispatchView = () => {
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
             <tr>
-              {['序号','商家名称','商家订单号','订单号','订单状态','地域','详细地址','详情','来源','工作机','客户名单','师傅','订单创建人','师傅id','创建人id','操作时间','取消原因','取消时间','录单时间','接单时间','总金额','成本','业绩','实付金额','垫付金额','剩余尾款','备注','完工收入','客户地图','操作'].map(h => (
+              {['序号','商家名称','商家订单号','订单号','订单状态','地域','详细地址','详情','来源','工作机','客户名单','师傅','订单创建人','师傅id','创建人id','操作时间','取消原因','取消详情','录单时间','接单时间','总金额','成本','业绩','实付金额','垫付金额','剩余尾款','备注','完工收入','客户地图','操作'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
             </tr>
