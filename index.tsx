@@ -457,20 +457,8 @@ const NotificationBar = () => {
 
 const QuickNav = ({ activeTab, onTabChange }: { activeTab: string, onTabChange: (tab: string) => void }) => {
   const items = [
-    { label: '订单管理', style: 'bg-[#fdf4ff] text-[#9c27b0] border border-pink-100' },
-    { label: '订单收款', style: 'bg-[#fffbeb] text-[#8d6e63] border border-amber-100' },
-    { label: '报错订单', style: 'bg-[#e3f2fd] text-[#1565c0] border border-blue-100' },
-    { label: '直派订单', style: 'bg-[#f1f8e9] text-[#2e7d32] border border-green-100' },
-    { label: '派单业绩', style: 'bg-[#e0f7fa] text-[#006064] border border-cyan-100' },
-    { label: '改单记录', style: 'bg-[#f3e5f5] text-[#7b1fa2] border border-purple-100' },
-    { label: '长期订单', style: 'bg-[#ffebee] text-[#c62828] border border-red-100' },
-    { label: '转派记录', style: 'bg-[#f5f5f5] text-[#455a64] border border-gray-200' },
-    { label: '派单记录', style: 'bg-[#fffde7] text-[#f57f17] border border-yellow-100' },
-    { label: '录单价格', style: 'bg-[#e8eaf6] text-[#283593] border border-indigo-100' },
-    { label: '报价',     style: 'bg-[#f9fbe7] text-[#827717] border border-lime-100' },
-    { label: '待入单库', style: 'bg-[#e1f5fe] text-[#0277bd] border border-sky-100' },
-    { label: '单库',     style: 'bg-[#ede7f6] text-[#4527a0] border border-violet-100' },
-    { label: '微信收款', style: 'bg-[#ffebee] text-[#c62828] border border-red-100' }, 
+    '订单管理', '订单收款', '报错订单', '直派订单', '派单业绩', '改单记录', '长期订单',
+    '转派记录', '派单记录', '录单价格', '报价', '待入单库', '单库', '微信收款'
   ];
 
   return (
@@ -478,11 +466,11 @@ const QuickNav = ({ activeTab, onTabChange }: { activeTab: string, onTabChange: 
       {items.map((item, index) => (
         <button 
           key={index} 
-          onClick={() => onTabChange(item.label)}
-          className={`h-9 rounded-md text-xs font-bold shadow-sm transition-all hover:brightness-95 active:scale-95 ${item.style} 
-            ${activeTab === item.label ? 'ring-2 ring-offset-2 ring-blue-500 scale-105 z-10' : ''}`}
+          onClick={() => onTabChange(item)}
+          className={`h-9 rounded-md text-xs font-bold shadow-sm transition-all hover:brightness-95 active:scale-95 bg-[#F0F9FE] text-[#007AFF] border border-[#93C5FD]
+            ${activeTab === item ? 'ring-2 ring-offset-2 ring-blue-500 scale-105 z-10' : ''}`}
         >
-          {item.label}
+          {item}
         </button>
       ))}
     </div>
