@@ -364,7 +364,7 @@ const generateWeChatCollectionData = () => Array.from({ length: 20 }).map((_, i)
 }));
 
 const generateMockData = (): Order[] => {
-  return Array.from({ length: 50 }).map((_, i) => ({
+  return Array.from({ length: 128 }).map((_, i) => ({
     id: i + 1,
     orderNo: `20231220${String(i).padStart(4, '0')}`,
     workOrderNo: `WO-${String(i).padStart(4, '0')}`,
@@ -1640,41 +1640,96 @@ const ActionCell = ({ orderId, onAction }: { orderId: number; onAction: (action:
 
 const Pagination = ({ total, current, pageSize, onPageChange, onSizeChange }: any) => {
   const totalPages = Math.ceil(total / pageSize);
+
+  // A simple way to handle page range to match the screenshot style (1 2 3 4 5 6 7)
+  const getPageRange = () => {
+      const pages = [];
+      const maxVisible = 7;
+      let start = Math.max(1, current - Math.floor(maxVisible / 2));
+      let end = Math.min(totalPages, start + maxVisible - 1);
+      
+      if (end - start + 1 < maxVisible) {
+          start = Math.max(1, end - maxVisible + 1);
+      }
+
+      for(let i=start; i<=end; i++) pages.push(i);
+      return pages;
+  };
+
   return (
-    <div className="flex items-center justify-between text-xs text-slate-500 w-full max-w-4xl mx-auto">
-      <div>共 {total} 条记录</div>
-      <div className="flex items-center gap-2">
-        <select 
-          value={pageSize} 
-          onChange={(e) => onSizeChange(Number(e.target.value))}
-          className="border border-gray-200 rounded h-7 px-2 outline-none"
-        >
-          <option value={10}>10条/页</option>
-          <option value={20}>20条/页</option>
-          <option value={50}>50条/页</option>
-        </select>
-        <div className="flex items-center border border-gray-200 rounded overflow-hidden">
-           <button 
-             disabled={current === 1}
-             onClick={() => onPageChange(current - 1)}
-             className="px-2 py-1.5 hover:bg-gray-50 border-r border-gray-200 disabled:opacity-50"
-           >
-             <ChevronLeft size={14} />
-           </button>
-           <div className="px-3 py-1.5 font-medium text-slate-700 bg-slate-50">{current} / {totalPages}</div>
-           <button 
-             disabled={current === totalPages}
-             onClick={() => onPageChange(current + 1)}
-             className="px-2 py-1.5 hover:bg-gray-50 border-l border-gray-200 disabled:opacity-50"
-           >
-             <ChevronRight size={14} />
-           </button>
-        </div>
-        <div className="flex items-center gap-1">
-          <span>跳至</span>
-          <input className="w-10 h-7 border border-gray-200 rounded text-center outline-none focus:border-blue-500" />
-          <span>页</span>
-        </div>
+    <div className="flex items-center text-sm text-slate-500 select-none">
+      <span className="mr-3 text-slate-600 text-xs">共 {total} 条</span>
+      
+      <div className="relative mr-3">
+         <select 
+            value={pageSize} 
+            onChange={(e) => onSizeChange(Number(e.target.value))}
+            className="appearance-none h-8 pl-3 pr-8 border border-slate-300 rounded hover:border-blue-400 focus:border-blue-500 outline-none bg-white cursor-pointer text-slate-600 text-xs font-medium"
+         >
+           <option value={10}>10条/页</option>
+           <option value={20}>20条/页</option>
+           <option value={50}>50条/页</option>
+         </select>
+         <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+      </div>
+      
+      <div className="flex items-center gap-1.5 mr-3">
+         <button 
+           onClick={() => onPageChange(Math.max(1, current - 1))}
+           disabled={current === 1}
+           className="w-8 h-8 flex items-center justify-center border border-slate-300 rounded bg-white text-slate-500 hover:border-blue-400 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+         >
+           <ChevronLeft size={16} strokeWidth={1.5} />
+         </button>
+
+         {getPageRange().map(p => (
+            <button
+              key={p}
+              onClick={() => onPageChange(p)}
+              className={`w-8 h-8 flex items-center justify-center border rounded transition-colors font-medium text-xs
+                ${current === p 
+                  ? 'bg-blue-600 border-blue-600 text-white shadow-sm' 
+                  : 'bg-white border-slate-300 text-slate-600 hover:border-blue-400 hover:text-blue-600'
+                }`}
+            >
+              {p}
+            </button>
+         ))}
+
+         <button 
+           onClick={() => onPageChange(Math.min(totalPages, current + 1))}
+           disabled={current === totalPages}
+           className="w-8 h-8 flex items-center justify-center border border-slate-300 rounded bg-white text-slate-500 hover:border-blue-400 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+         >
+           <ChevronRight size={16} strokeWidth={1.5} />
+         </button>
+      </div>
+
+      <div className="flex items-center gap-2 text-xs">
+         <span className="text-slate-600">前往</span>
+         <input 
+           type="text"
+           className="w-10 h-8 border border-slate-300 rounded text-center outline-none focus:border-blue-500 hover:border-blue-400 text-slate-600"
+           defaultValue={current}
+           key={current} // force re-render on external change
+           onBlur={(e) => {
+             const val = parseInt(e.target.value);
+             if(!isNaN(val) && val >=1 && val <= totalPages) {
+                onPageChange(val);
+             } else {
+                e.target.value = current.toString();
+             }
+           }}
+           onKeyDown={(e) => {
+             if(e.key === 'Enter') {
+                const val = parseInt(e.currentTarget.value);
+                if(!isNaN(val) && val >=1 && val <= totalPages) {
+                    onPageChange(val);
+                }
+             }
+           }}
+         />
+         <span className="text-slate-600">页</span>
       </div>
     </div>
   );
@@ -2044,8 +2099,8 @@ const App = () => {
                 </table>
               </div>
               
-              {/* --- 分页栏重构: 居中显示 --- */}
-              <div className="bg-white px-6 py-3 border-t border-gray-200 mt-auto">
+              {/* --- 分页栏: 使用新的 Pagination 组件并居中 --- */}
+              <div className="bg-white px-6 py-3 border-t border-gray-200 mt-auto flex justify-center">
                  <Pagination 
                     total={totalItems} 
                     current={currentPage} 
