@@ -43,7 +43,10 @@ import {
   Phone,
   ChevronLeft,
   ChevronRight,
-  RefreshCw
+  RefreshCw,
+  Volume2,
+  Flame,
+  Star
 } from 'lucide-react';
 
 // --- 类型定义 ---
@@ -363,174 +366,379 @@ const generateWeChatCollectionData = () => Array.from({ length: 20 }).map((_, i)
   otherTotal: (100 + i * 10).toFixed(2),
 }));
 
-const generateMockData = (): Order[] => {
-  return Array.from({ length: 128 }).map((_, i) => ({
-    id: i + 1,
-    orderNo: `20231220${String(i).padStart(4, '0')}`,
-    workOrderNo: `WO-${String(i).padStart(4, '0')}`,
-    dispatchTime: '2023-12-20 10:00',
-    mobile: `138${String(Math.random()).slice(2, 10)}`,
-    serviceItem: i % 3 === 0 ? '空调清洗' : '冰箱维修',
-    serviceRatio: '3:7',
-    status: i % 5 === 0 ? OrderStatus.PendingDispatch : OrderStatus.Completed,
-    region: '北京市朝阳区',
-    address: '某某小区1号楼101',
-    details: '客户备注需要带鞋套',
-    recordTime: '2023-12-19 14:00',
-    source: '美团',
-    totalAmount: 200,
-    cost: 50,
-    hasAdvancePayment: i % 4 === 0,
-    depositAmount: i % 4 === 0 ? 50 : 0,
-    weightedCoefficient: 1.2,
-    regionPeople: 5,
-    isReminded: false,
-    suggestedMethod: '一口价',
-    guidePrice: 180,
-    historicalPrice: '150-200',
-    hasCoupon: i % 3 === 1,
-    isCouponVerified: i % 3 === 1,
-    isRead: i % 2 === 0,
-    isCalled: i % 2 === 1,
-    warrantyPeriod: '90天',
-    workPhone: '13900000000',
-    customerName: '张三',
-    dispatcherName: '李四',
-    recorderName: '王五',
-    masterName: '赵六',
-    masterPhone: '13700000000',
-    totalReceipt: 200,
-    revenue: 150,
-    actualPaid: 200,
-    advancePaymentAmount: 0,
-    otherReceipt: 0,
-    completionIncome: 150,
-    completionTime: '2023-12-20 12:00',
-    paymentTime: '2023-12-20 12:05',
-    serviceTime: '2023-12-20 10:30',
-    voiderNameAndReason: '',
-    voidDetails: '',
-    cancelReasonAndDetails: '',
-    favoriteRemark: ''
-  }));
-};
+const FULL_MOCK_DATA: Order[] = Array.from({ length: 100 }).map((_, i) => ({
+  id: i + 1,
+  orderNo: `ORDER-2023-${String(i).padStart(4, '0')}`,
+  workOrderNo: `WORK-${String(i).padStart(4, '0')}`,
+  dispatchTime: '2023-12-01 10:00',
+  mobile: `138${String(Math.random()).slice(2, 10)}`,
+  serviceItem: i % 3 === 0 ? '空调清洗' : '马桶疏通',
+  serviceRatio: '3:7',
+  status: i % 5 === 0 ? OrderStatus.PendingDispatch : OrderStatus.Completed,
+  region: '北京市朝阳区',
+  address: '朝阳北路101号朝阳北路101号',
+  details: '客户备注尽量早点到',
+  recordTime: '2023-12-01 09:00',
+  source: '美团',
+  totalAmount: 200,
+  cost: 50,
+  hasAdvancePayment: i % 10 === 0,
+  depositAmount: i % 10 === 0 ? 50 : 0,
+  weightedCoefficient: 1.0,
+  regionPeople: 5,
+  isReminded: false,
+  suggestedMethod: '自营',
+  guidePrice: 180,
+  historicalPrice: '150-200',
+  hasCoupon: i % 4 === 0,
+  isCouponVerified: i % 4 === 0 && i % 2 === 0,
+  isRead: i % 3 !== 0,
+  isCalled: i % 2 === 0,
+  warrantyPeriod: '3个月',
+  workPhone: '13900000000',
+  customerName: '张三',
+  dispatcherName: '李四',
+  recorderName: '王五',
+  masterName: '赵六',
+  masterPhone: '13700000000',
+  totalReceipt: 200,
+  revenue: 150,
+  actualPaid: 200,
+  advancePaymentAmount: 0,
+  otherReceipt: 0,
+  completionIncome: 150,
+  completionTime: '2023-12-01 12:00',
+  paymentTime: '2023-12-01 12:30',
+  serviceTime: '2023-12-01 11:00',
+  voiderNameAndReason: '',
+  voidDetails: '',
+  cancelReasonAndDetails: '',
+  favoriteRemark: ''
+}));
 
-const FULL_MOCK_DATA = generateMockData();
-
-// --- 基础组件定义 ---
-
-const NotificationBar = () => {
-  return (
-    <div className="mb-3 bg-[#111827] rounded-md px-4 py-2.5 flex items-center gap-4 overflow-hidden relative shadow-sm border border-slate-800">
-      <div className="flex items-center gap-1.5 bg-[#EF4444] text-white px-2 py-0.5 rounded text-xs font-bold whitespace-nowrap flex-shrink-0">
-        <span>重要公告</span>
-        <Bell size={12} fill="currentColor" />
+const FilterContainer = ({ isSearchOpen, onToggleSearch, extraButtons, children }: any) => (
+  <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-200 mb-2">
+    <div className="flex justify-between items-center mb-2">
+      <div className="flex items-center gap-2">
+         <button onClick={onToggleSearch} className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100">
+           <Filter size={14} /> 筛选
+           {isSearchOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+         </button>
       </div>
-      <div className="flex-1 overflow-hidden relative h-5 group flex items-center">
-        <Megaphone size={16} className="text-[#EF4444] mr-3 flex-shrink-0" />
-        <div className="flex-1 overflow-hidden relative h-full">
-          <div className="absolute whitespace-nowrap animate-marquee text-xs text-gray-300 flex items-center h-full font-medium">
-            <span className="mr-16">关于 2025 年度秋季职级晋升评审的通知：点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。</span>
-            <span className="mr-16">📢 系统升级通知：今晚 24:00 将进行系统维护，预计耗时 30 分钟。</span>
-            <span className="mr-16">🔥 10月业绩pk赛圆满结束，恭喜华东大区获得冠军！</span>
-          </div>
+      {extraButtons}
+    </div>
+    {isSearchOpen && <div className="mt-2 pt-2 border-t border-gray-100">{children}</div>}
+  </div>
+);
+
+const DataOverview = ({ items }: { items: { label: string; value: string | number }[] }) => (
+  <div className="flex gap-4 mb-2">
+    {items.map((item, idx) => (
+      <div key={idx} className="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200 flex flex-col">
+        <span className="text-xs text-slate-500">{item.label}</span>
+        <span className="text-lg font-bold text-slate-800">{item.value}</span>
+      </div>
+    ))}
+  </div>
+);
+
+const Pagination = ({ total, current, pageSize, onPageChange, onSizeChange }: any) => (
+  <div className="flex items-center gap-2 text-xs text-slate-500">
+    <span>共 {total} 条</span>
+    <select 
+      value={pageSize} 
+      onChange={e => onSizeChange(Number(e.target.value))}
+      className="border rounded px-1 py-0.5"
+    >
+      {[10, 20, 50, 100].map(size => <option key={size} value={size}>{size}条/页</option>)}
+    </select>
+    <div className="flex gap-1">
+      <button 
+        onClick={() => onPageChange(Math.max(1, current - 1))}
+        disabled={current === 1}
+        className="px-2 py-0.5 border rounded disabled:opacity-50"
+      >
+        Prev
+      </button>
+      <span className="px-2 py-0.5">{current}</span>
+      <button 
+        onClick={() => onPageChange(current + 1)} 
+        className="px-2 py-0.5 border rounded"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+);
+
+const NotificationBar = () => (
+  <div className="bg-[#111827] text-white px-4 py-2.5 rounded-lg mb-3 flex items-center justify-between text-xs shadow-md border border-slate-800/50 overflow-hidden">
+    <div className="flex items-center gap-6 overflow-hidden mr-4 flex-1">
+      {/* Badge */}
+      <div className="flex items-center gap-1.5 bg-[#ef4444] text-white px-2 py-1 rounded-[4px] text-[11px] font-bold shrink-0 tracking-wide shadow-sm z-10 relative">
+        <span>重要公告</span>
+        <Bell size={10} fill="currentColor" strokeWidth={3} />
+      </div>
+      
+      {/* Scrolling Content */}
+      <div className="flex-1 overflow-hidden relative h-5 group">
+        <div className="absolute whitespace-nowrap animate-marquee group-hover:pause flex items-center gap-12 text-slate-300 font-medium h-full">
+            <div className="flex items-center gap-2">
+               <Megaphone size={14} className="text-[#ef4444]" />
+               <span>通知：点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。</span>
+            </div>
+            <div className="flex items-center gap-2">
+               <Volume2 size={14} className="text-white" />
+               <span>系统升级通知：今晚 24:00 将进行系统维护，预计耗时 30 分钟。</span>
+            </div>
+            <div className="flex items-center gap-2">
+               <Flame size={14} className="text-orange-500 fill-orange-500" />
+               <span>10月业绩pk赛圆满结束，恭喜华东大区获得冠军！</span>
+            </div>
+            {/* Duplicate for seamless loop effect if needed, but css animation reset handles it for simple cases */}
+            <div className="flex items-center gap-2">
+               <Megaphone size={14} className="text-[#ef4444]" />
+               <span>通知：点击下方详情以阅读完整公告内容。</span>
+            </div>
         </div>
       </div>
-      <div className="text-slate-400 text-xs font-medium bg-slate-800 px-2 py-0.5 rounded border border-slate-700 whitespace-nowrap">
-        2025-11-19
-      </div>
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
-        }
-        .animate-marquee {
-          animation: marquee 40s linear infinite;
-        }
-        .group:hover .animate-marquee {
-          animation-play-state: paused;
-        }
-      `}</style>
     </div>
-  );
-};
 
+    {/* Date */}
+    <div className="bg-[#1f2937] text-blue-400 border border-[#374151] px-3 py-1 rounded-[4px] text-[11px] font-mono shrink-0 shadow-sm z-10 ml-4 relative">
+      2025-11-19
+    </div>
+
+    <style>{`
+      @keyframes marquee {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+      }
+      .animate-marquee {
+        animation: marquee 30s linear infinite;
+      }
+      .group:hover .group-hover\\:pause {
+        animation-play-state: paused;
+      }
+    `}</style>
+  </div>
+);
+
+// --- 优化后的导航栏组件 (GRID + 新样式) ---
 const QuickNav = ({ activeTab, onTabChange }: { activeTab: string, onTabChange: (tab: string) => void }) => {
+  // 调整顺序：将 '直派订单' 移动到索引1，将 '订单收款' 移动到索引3
   const items = [
-    '订单管理', '订单收款', '报错订单', '直派订单', '派单业绩', '改单记录', '长期订单',
+    '订单管理', '直派订单', '报错订单', '订单收款', '派单业绩', '改单记录', '长期订单',
     '转派记录', '派单记录', '录单价格', '报价', '待入单库', '单库', '微信收款'
   ];
 
   return (
     <div className="grid grid-cols-7 gap-3 mb-3 px-1">
-      {items.map((item, index) => (
-        <button 
-          key={index} 
-          onClick={() => onTabChange(item)}
-          className={`h-9 rounded-md text-xs font-bold shadow-sm transition-all hover:brightness-95 active:scale-95 bg-[#F0F9FE] text-[#007AFF] border border-[#93C5FD]
-            ${activeTab === item ? 'ring-2 ring-offset-2 ring-blue-500 scale-105 z-10' : ''}`}
-        >
-          {item}
-        </button>
-      ))}
+      {items.map((item, index) => {
+        const isDirectDispatch = item === '直派订单';
+        const isActive = activeTab === item;
+
+        // Base styles
+        let buttonClass = "h-10 rounded-lg text-sm font-bold shadow-sm transition-all duration-200 border flex items-center justify-center gap-1 ";
+        
+        if (isActive) {
+           // Selected State
+           buttonClass += "bg-[#0ea5e9] text-white border-[#0ea5e9] ";
+        } else {
+           // Unselected State
+           buttonClass += "bg-[#f0f9ff] border-[#bae6fd] hover:bg-[#e0f2fe] ";
+           if (isDirectDispatch) {
+             buttonClass += "text-orange-500 "; // Orange text for Direct Dispatch when unselected
+           } else {
+             buttonClass += "text-[#0ea5e9] "; // Standard Blue text
+           }
+        }
+
+        return (
+          <button 
+            key={index} 
+            onClick={() => onTabChange(item)}
+            className={buttonClass}
+          >
+            {isDirectDispatch && (
+              <Star 
+                size={14} 
+                fill="currentColor" 
+                className={isActive ? "text-white" : "text-orange-500"} 
+              />
+            )}
+            <span>{item}</span>
+          </button>
+        );
+      })}
     </div>
   );
 };
 
-// 通用数据概览组件
-const DataOverview = ({ items }: { items: { label: string; value: string | number }[] }) => {
+const ActionBar = ({ onRecord, isSearchOpen, onToggleSearch }: any) => (
+  <div className="flex justify-between items-center mb-2">
+    <div className="flex gap-2">
+      <button onClick={onRecord} className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-blue-700 shadow-sm transition-all">
+        <Plus size={14} /> 录单
+      </button>
+      <button className="flex items-center gap-1 bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs hover:bg-slate-50 transition-all">
+        <Upload size={14} /> 导入
+      </button>
+    </div>
+    <div className="flex gap-2">
+       <button onClick={onToggleSearch} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs transition-all border ${isSearchOpen ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-white text-slate-600 border-slate-300'}`}>
+         <Filter size={14} /> 筛选
+       </button>
+       <button className="flex items-center gap-1 bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs hover:bg-slate-50 transition-all">
+         <RefreshCw size={14} /> 刷新
+       </button>
+    </div>
+  </div>
+);
+
+const SearchPanel = ({ isOpen, onToggle }: any) => {
+  if (!isOpen) return null;
   return (
-    <div className="flex gap-6 mb-3 px-2 text-xs font-medium text-slate-600 bg-white border border-slate-100 p-2 rounded-lg shadow-sm">
-      {items.map((item, idx) => (
-        <div key={idx} className="flex gap-1 items-center">
-          <span className="text-slate-500">{item.label}:</span>
-          <span className="font-bold text-slate-900">{item.value}</span>
-        </div>
-      ))}
+    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-3 animate-in slide-in-from-top-2 duration-200">
+      <div className="grid grid-cols-6 gap-3">
+         <div className="flex flex-col gap-1">
+           <label className="text-xs text-slate-500">订单号/手机号</label>
+           <input className="h-8 border border-slate-200 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
+         </div>
+         <div className="flex items-end gap-2">
+            <button className="h-8 px-4 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 w-full">查询</button>
+            <button className="h-8 px-4 bg-slate-100 text-slate-600 rounded text-xs hover:bg-slate-200 w-full">重置</button>
+         </div>
+      </div>
     </div>
   );
-}
+};
 
-// 通用操作栏 + 筛选容器
-const FilterContainer = ({ 
-  children, 
-  onToggleSearch, 
-  isSearchOpen,
-  extraButtons 
-}: { 
-  children?: React.ReactNode; 
-  onToggleSearch: () => void; 
-  isSearchOpen: boolean;
-  extraButtons?: React.ReactNode
-}) => {
+const ServiceItemCell = ({ item, warranty }: any) => (
+  <div className="flex flex-col">
+    <span className="font-medium text-slate-700 text-[13px]">{item}</span>
+    <span className="text-[11px] text-slate-400">保: {warranty}</span>
+  </div>
+);
+
+const StatusCell = ({ order }: { order: Order }) => {
+  const getStatusColor = (s: OrderStatus) => {
+    switch(s) {
+      case OrderStatus.PendingDispatch: return 'bg-orange-100 text-orange-600 border-orange-200';
+      case OrderStatus.Completed: return 'bg-green-100 text-green-600 border-green-200';
+      case OrderStatus.Void: return 'bg-gray-100 text-gray-500 border-gray-200';
+      case OrderStatus.Error: return 'bg-red-100 text-red-600 border-red-200';
+      default: return 'bg-blue-50 text-blue-600 border-blue-200';
+    }
+  };
   return (
-    <>
-      <div className="flex items-center justify-between mb-3 px-1">
-         <div className="flex items-center gap-3">
-            {extraButtons}
-         </div>
-         <button 
-            onClick={onToggleSearch}
-            className={`flex items-center gap-1.5 transition-all active:scale-95 px-5 py-1.5 rounded shadow-md h-8 text-xs font-medium ml-auto
-              ${isSearchOpen 
-                ? 'bg-blue-700 text-white shadow-blue-300' 
-                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200'}`}
-          >
-              <Settings size={14} />
-              <span>{isSearchOpen ? '收起高级筛选' : '点这高级筛选'}</span>
-              {isSearchOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-          </button>
-      </div>
-      {isSearchOpen && (
-        <div className="shadow-sm mb-3 rounded-lg border border-blue-200 bg-[#F0F7FF] px-4 py-3 animate-in fade-in slide-in-from-top-2">
-            {children}
-        </div>
-      )}
-    </>
-  )
-}
+    <div className={`px-2 py-0.5 rounded text-[11px] border text-center font-medium ${getStatusColor(order.status)}`}>
+      {order.status}
+    </div>
+  );
+};
 
-// --- 独立 Tab 视图组件 ---
+const TooltipCell = ({ content, maxWidthClass, showTooltip }: any) => (
+  <div className={`relative group ${maxWidthClass}`}>
+    <div className="truncate text-slate-600 text-[13px] cursor-pointer">{content}</div>
+    {showTooltip && (
+      <div className="absolute bottom-full left-0 mb-1 bg-slate-800 text-white text-xs p-2 rounded shadow-lg z-50 whitespace-normal min-w-[200px]">
+        {content}
+      </div>
+    )}
+  </div>
+);
+
+const CombinedIdCell = ({ orderNo, workOrderNo, hasAdvancePayment, depositAmount }: any) => (
+  <div className="flex flex-col">
+    <span className="text-[12px] text-blue-600 font-medium font-mono">{orderNo}</span>
+    <span className="text-[11px] text-slate-400 font-mono">{workOrderNo}</span>
+    {hasAdvancePayment && <span className="text-[10px] text-orange-500 bg-orange-50 px-1 rounded w-fit mt-0.5">垫: {depositAmount}</span>}
+  </div>
+);
+
+const CombinedTimeCell = ({ recordTime, dispatchTime }: any) => (
+  <div className="flex flex-col">
+    <span className="text-[11px] text-slate-500">录: {recordTime}</span>
+    <span className="text-[11px] text-slate-500">派: {dispatchTime}</span>
+  </div>
+);
+
+const ReminderCell = ({ order, onRemind }: any) => (
+  <div className="text-center">
+    <button 
+      onClick={() => onRemind(order.id)}
+      className={`p-1.5 rounded-full transition-all ${order.isReminded ? 'bg-orange-100 text-orange-500' : 'bg-slate-100 text-slate-400 hover:bg-orange-50 hover:text-orange-500'}`}
+    >
+      <Bell size={14} fill={order.isReminded ? "currentColor" : "none"} />
+    </button>
+  </div>
+);
+
+const ActionCell = ({ orderId, onAction }: any) => (
+  <div className="flex justify-center gap-1">
+    <button onClick={() => onAction('完单', orderId)} className="p-1 text-green-600 hover:bg-green-50 rounded"><CheckCircle size={14} /></button>
+    <button onClick={() => onAction('详情', orderId)} className="p-1 text-blue-600 hover:bg-blue-50 rounded"><FileText size={14} /></button>
+  </div>
+);
+
+const Modal = ({ isOpen, onClose, title, children }: any) => {
+    if(!isOpen) return null;
+    return createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-xl shadow-2xl w-[600px] max-h-[90vh] overflow-hidden flex flex-col">
+                <div className="flex justify-between items-center p-4 border-b border-gray-100">
+                    <h3 className="font-bold text-lg text-slate-800">{title}</h3>
+                    <button onClick={onClose} className="p-1 rounded-full hover:bg-gray-100"><X size={20} className="text-slate-500" /></button>
+                </div>
+                <div className="p-6 overflow-y-auto flex-1">
+                    {children}
+                </div>
+            </div>
+        </div>,
+        document.body
+    );
+};
+
+const RecordOrderModal = ({ isOpen, onClose }: any) => (
+    <Modal isOpen={isOpen} onClose={onClose} title="录入新订单">
+        <div className="space-y-4">
+             <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-1"><label className="text-xs text-slate-500">客户手机</label><input className="w-full border p-2 rounded text-sm"/></div>
+                 <div className="space-y-1"><label className="text-xs text-slate-500">服务项目</label><input className="w-full border p-2 rounded text-sm"/></div>
+             </div>
+             <div className="flex justify-end pt-4">
+                 <button className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">提交订单</button>
+             </div>
+        </div>
+    </Modal>
+);
+
+const CompleteOrderModal = ({ isOpen, onClose, order }: any) => (
+    <Modal isOpen={isOpen} onClose={onClose} title="完成订单">
+        <div className="space-y-4">
+            <p className="text-sm text-slate-600">确认完成订单 <span className="font-bold">{order?.orderNo}</span> ?</p>
+             <div className="space-y-1"><label className="text-xs text-slate-500">收款金额</label><input className="w-full border p-2 rounded text-sm" placeholder="0.00"/></div>
+             <div className="flex justify-end pt-4 gap-2">
+                 <button onClick={onClose} className="bg-gray-100 text-slate-600 px-4 py-2 rounded text-sm hover:bg-gray-200">取消</button>
+                 <button className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700">确认完单</button>
+             </div>
+        </div>
+    </Modal>
+);
+
+const ChatModal = ({ isOpen, onClose, role, order }: any) => (
+    <Modal isOpen={isOpen} onClose={onClose} title={`与 ${role} 聊天 - ${order?.orderNo}`}>
+        <div className="h-64 bg-slate-50 rounded border border-slate-200 mb-4 p-4 flex flex-col items-center justify-center text-slate-400">
+            <MessageCircle size={32} className="mb-2"/>
+            <p>聊天记录为空</p>
+        </div>
+        <div className="flex gap-2">
+            <input className="flex-1 border p-2 rounded text-sm" placeholder="输入消息..."/>
+            <button className="bg-blue-600 text-white px-4 py-2 rounded"><Send size={16}/></button>
+        </div>
+    </Modal>
+);
 
 // 1. 转派记录视图
 const TransferRecordView = () => {
@@ -540,6 +748,7 @@ const TransferRecordView = () => {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
+         {/* ... filters ... */}
          <div className="flex gap-4 items-center">
              <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-48" placeholder="请输入内容" /></div>
              <div className="flex items-center gap-2"><span className="text-xs text-slate-500">操作人员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
@@ -558,9 +767,9 @@ const TransferRecordView = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center">{row.id}</td>
                  <td className="px-3 py-2">{row.orderNo}</td>
                  <td className="px-3 py-2">{row.createTime}</td>
@@ -574,6 +783,7 @@ const TransferRecordView = () => {
           </tbody>
         </table>
       </div>
+      {/* ... pagination ... */}
       <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2 items-center">
          <span>共 398 条</span>
          <select className="border text-xs"><option>10条/页</option></select>
@@ -596,8 +806,8 @@ const DispatchRecordView = () => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
+      {/* ... header & filters ... */}
       <div className="mb-2">
-         {/* Placeholder DataOverview as per request "show data overview data" */}
          <DataOverview items={[{ label: '派单总数', value: 398 }, { label: '今日派单', value: 12 }]} />
       </div>
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={<button className="bg-green-500 text-white px-3 py-1 text-xs rounded">导出</button>}>
@@ -626,9 +836,9 @@ const DispatchRecordView = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center">{row.id}</td>
                  <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
                  <td className="px-3 py-2 whitespace-nowrap">{row.dispatchTime}</td>
@@ -663,7 +873,264 @@ const DispatchRecordView = () => {
   );
 };
 
-// 3. 录单价格视图
+// 3. 报错订单视图 (New)
+const ErrorOrderView = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const data = generateErrorData();
+
+  return (
+    <div className="flex flex-col h-full overflow-hidden">
+      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
+         <div className="flex gap-4 items-center flex-wrap">
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">上报时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /> <span className="text-xs">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+         </div>
+      </FilterContainer>
+
+      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
+        <table className="w-full text-left border-collapse text-xs">
+          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
+            <tr>
+              {['序号','订单号','上报时间','手机号','来源','工作机','客户姓名','状态','录单员','师傅','派单员','上报人','报错类型','报错详情','处理详情','处理时间','解决方案','解决人','解决时间'].map(h => (
+                <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-300">
+             {data.map((row, i) => (
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
+                 <td className="px-3 py-2 text-center">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
+                 <td className="px-3 py-2 whitespace-nowrap">{row.reportTime}</td>
+                 <td className="px-3 py-2">{row.mobile}</td>
+                 <td className="px-3 py-2">{row.source}</td>
+                 <td className="px-3 py-2">{row.workPhone}</td>
+                 <td className="px-3 py-2">{row.clientName}</td>
+                 <td className="px-3 py-2">{row.status}</td>
+                 <td className="px-3 py-2">{row.recorder}</td>
+                 <td className="px-3 py-2">{row.master}</td>
+                 <td className="px-3 py-2">{row.dispatcher}</td>
+                 <td className="px-3 py-2">{row.reporter}</td>
+                 <td className="px-3 py-2">{row.type}</td>
+                 <td className="px-3 py-2 max-w-[150px] truncate" title={row.detail}>{row.detail}</td>
+                 <td className="px-3 py-2 max-w-[150px] truncate" title={row.processDetail}>{row.processDetail}</td>
+                 <td className="px-3 py-2 whitespace-nowrap">{row.processTime}</td>
+                 <td className="px-3 py-2">{row.solution}</td>
+                 <td className="px-3 py-2">{row.solver}</td>
+                 <td className="px-3 py-2 whitespace-nowrap">{row.solveTime}</td>
+               </tr>
+             ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// 4. 直派订单视图 (New)
+const DirectDispatchView = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const data = generateDirectDispatchData();
+
+  return (
+    <div className="flex flex-col h-full overflow-hidden">
+      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
+         <div className="flex gap-4 items-center flex-wrap">
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">商家单号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+         </div>
+      </FilterContainer>
+
+      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
+        <table className="w-full text-left border-collapse text-xs">
+          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
+            <tr>
+              {['序号','订单号','商家','商家单号','状态','区域','地址','详情','来源','工作机','客户姓名','师傅','创建人','师傅ID','创建人ID','操作时间','取消原因','取消时间','录单时间','接单时间','总价','成本','利润','实付','订金','尾款','备注','完工收入','地图'].map(h => (
+                <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-300">
+             {data.map((row, i) => (
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
+                 <td className="px-3 py-2 text-center">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
+                 <td className="px-3 py-2">{row.merchant}</td>
+                 <td className="px-3 py-2">{row.merchantOrderNo}</td>
+                 <td className="px-3 py-2">{row.status}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.region}>{row.region}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.address}>{row.address}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.detail}>{row.detail}</td>
+                 <td className="px-3 py-2">{row.source}</td>
+                 <td className="px-3 py-2">{row.workPhone}</td>
+                 <td className="px-3 py-2">{row.clientName}</td>
+                 <td className="px-3 py-2">{row.master}</td>
+                 <td className="px-3 py-2">{row.creator}</td>
+                 <td className="px-3 py-2">{row.masterId}</td>
+                 <td className="px-3 py-2">{row.creatorId}</td>
+                 <td className="px-3 py-2 whitespace-nowrap">{row.opTime}</td>
+                 <td className="px-3 py-2">{row.cancelReason}</td>
+                 <td className="px-3 py-2">{row.cancelTime}</td>
+                 <td className="px-3 py-2 whitespace-nowrap">{row.recordTime}</td>
+                 <td className="px-3 py-2 whitespace-nowrap">{row.receiveTime}</td>
+                 <td className="px-3 py-2">{row.total}</td>
+                 <td className="px-3 py-2">{row.cost}</td>
+                 <td className="px-3 py-2">{row.revenue}</td>
+                 <td className="px-3 py-2">{row.paid}</td>
+                 <td className="px-3 py-2">{row.deposit}</td>
+                 <td className="px-3 py-2">{row.rest}</td>
+                 <td className="px-3 py-2">{row.remark}</td>
+                 <td className="px-3 py-2">{row.finishIncome}</td>
+                 <td className="px-3 py-2 text-blue-600 cursor-pointer">{row.map}</td>
+               </tr>
+             ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// 5. 派单业绩视图 (New)
+const DispatchPerformanceView = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const data = generatePerformanceData();
+
+  return (
+    <div className="flex flex-col h-full overflow-hidden">
+      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
+         <div className="flex gap-4 items-center">
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">派单员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+         </div>
+      </FilterContainer>
+
+      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
+        <table className="w-full text-left border-collapse text-xs">
+          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
+            <tr>
+              {['序号','派单员','总业绩','手动派单线下业绩','手动派单平台业绩','手动派单总业绩','自动派单线下业绩','自动派单平台业绩','自动派单总业绩'].map(h => (
+                <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-300">
+             {data.map((row, i) => (
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
+                 <td className="px-3 py-2 text-center">{row.id}</td>
+                 <td className="px-3 py-2">{row.dispatcher}</td>
+                 <td className="px-3 py-2 font-bold text-red-600">{row.total}</td>
+                 <td className="px-3 py-2">{row.manualOffline}</td>
+                 <td className="px-3 py-2">{row.manualPlatform}</td>
+                 <td className="px-3 py-2 font-medium">{row.manualTotal}</td>
+                 <td className="px-3 py-2">{row.autoOffline}</td>
+                 <td className="px-3 py-2">{row.autoPlatform}</td>
+                 <td className="px-3 py-2 font-medium">{row.autoTotal}</td>
+               </tr>
+             ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// 6. 改单记录视图 (New)
+const ChangeRecordView = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const data = generateChangeData();
+
+  return (
+    <div className="flex flex-col h-full overflow-hidden">
+      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
+         <div className="flex gap-4 items-center">
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+         </div>
+      </FilterContainer>
+
+      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
+        <table className="w-full text-left border-collapse text-xs">
+          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
+            <tr>
+              {['序号','ID','订单号','修改时间','手机号','操作人'].map(h => (
+                <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-300">
+             {data.map((row, i) => (
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
+                 <td className="px-3 py-2 text-center">{row.id}</td>
+                 <td className="px-3 py-2 text-center">{row.seq}</td>
+                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
+                 <td className="px-3 py-2 whitespace-nowrap">{row.updateTime}</td>
+                 <td className="px-3 py-2">{row.mobile}</td>
+                 <td className="px-3 py-2">{row.operator}</td>
+               </tr>
+             ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// 7. 长期订单视图 (New)
+const LongTermOrderView = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const data = generateLongTermData();
+
+  return (
+    <div className="flex flex-col h-full overflow-hidden">
+       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
+         <div className="flex gap-4 items-center flex-wrap">
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">状态</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+         </div>
+      </FilterContainer>
+
+      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
+        <table className="w-full text-left border-collapse text-xs">
+          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
+            <tr>
+              {['序号','订单号','手机号','客户姓名','状态','师傅','录单员','派单员','创建时间','申请原因','证明材料'].map(h => (
+                <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-300">
+             {data.map((row, i) => (
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
+                 <td className="px-3 py-2 text-center">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
+                 <td className="px-3 py-2">{row.mobile}</td>
+                 <td className="px-3 py-2">{row.clientName}</td>
+                 <td className="px-3 py-2">{row.status}</td>
+                 <td className="px-3 py-2">{row.master}</td>
+                 <td className="px-3 py-2">{row.recorder}</td>
+                 <td className="px-3 py-2">{row.dispatcher}</td>
+                 <td className="px-3 py-2 whitespace-nowrap">{row.createTime}</td>
+                 <td className="px-3 py-2">{row.reason}</td>
+                 <td className="px-3 py-2 text-blue-600 cursor-pointer">{row.material}</td>
+               </tr>
+             ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// 8. 录单价格视图
 const RecordingPriceView = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const data = generateRecordingPriceData();
@@ -696,9 +1163,9 @@ const RecordingPriceView = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center"><input type="checkbox" /></td>
                  <td className="px-3 py-2 text-center">{row.id}</td>
                  <td className="px-3 py-2">{row.price}</td>
@@ -727,7 +1194,7 @@ const RecordingPriceView = () => {
   );
 };
 
-// 4. 报价视图
+// 9. 报价视图
 const QuotationView = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const data = generateQuotationData();
@@ -764,9 +1231,9 @@ const QuotationView = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center"><input type="checkbox" /></td>
                  <td className="px-3 py-2 text-center">{row.id}</td>
                  <td className="px-3 py-2">{row.city}</td>
@@ -805,7 +1272,7 @@ const QuotationView = () => {
   );
 };
 
-// 5. 待入单库视图
+// 10. 待入单库视图
 const PendingEntryView = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const data = generatePendingEntryData();
@@ -842,9 +1309,9 @@ const PendingEntryView = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center">{row.id}</td>
                  <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
                  <td className="px-3 py-2 whitespace-nowrap">{row.createTime}</td>
@@ -878,7 +1345,7 @@ const PendingEntryView = () => {
   );
 };
 
-// 6. 单库视图
+// 11. 单库视图
 const OrderLibraryView = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const data = generateOrderLibraryData();
@@ -914,9 +1381,9 @@ const OrderLibraryView = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center">{row.id}</td>
                  <td className="px-3 py-2">{row.isValid}</td>
                  <td className="px-3 py-2">{row.isVisible}</td>
@@ -956,6 +1423,7 @@ const OrderLibraryView = () => {
          <span>共 0 条</span>
          <select className="border text-xs"><option>10条/页</option></select>
          <button className="border px-2 py-0.5 bg-blue-500 text-white rounded">1</button>
+         <button className="border px-2 py-0.5 rounded">2</button>
          <button className="border px-2 py-0.5 rounded">{'>'}</button>
          <span>前往 <input className="w-8 border text-center"/> 页</span>
        </div>
@@ -963,7 +1431,7 @@ const OrderLibraryView = () => {
   );
 };
 
-// 7. 微信收款视图
+// 12. 微信收款视图
 const WeChatCollectionView = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const data = generateWeChatCollectionData();
@@ -990,9 +1458,9 @@ const WeChatCollectionView = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center">{row.id}</td>
                  <td className="px-3 py-2">{row.dispatcher}</td>
                  <td className="px-3 py-2 font-bold text-orange-600">{row.wechatTotal}</td>
@@ -1007,7 +1475,7 @@ const WeChatCollectionView = () => {
   );
 };
 
-// 1. 订单收款视图
+// 13. 订单收款视图
 const OrderPaymentView = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const data = generatePaymentData();
@@ -1038,9 +1506,9 @@ const OrderPaymentView = () => {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
+               <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center">{row.id}</td>
                  <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
                  <td className="px-3 py-2">{row.dispatcher}</td>
@@ -1067,773 +1535,6 @@ const OrderPaymentView = () => {
   );
 };
 
-// 2. 报错订单视图
-const ErrorOrderView = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const data = generateErrorData();
-
-  return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <div className="mb-2">
-        <DataOverview items={[
-          { label: '订单总数', value: 20 },
-          { label: '待处理', value: 5 },
-          { label: '处理中', value: 10 },
-          { label: '已解决', value: 5 }
-        ]} />
-      </div>
-      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={<button className="bg-blue-600 text-white px-3 py-1 text-xs rounded">一键导出</button>}>
-         <div className="grid grid-cols-6 gap-3">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">订单号/手机号</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">录单人</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">派单员</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap">报错发起时间</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /><span className="text-xs">-</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">状态</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">报错类型</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">订单来源</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">工作机</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="col-span-1 flex gap-2">
-                <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs w-full">搜索</button>
-                <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs w-full">重置</button>
-             </div>
-         </div>
-      </FilterContainer>
-
-      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
-        <table className="w-full text-left border-collapse text-xs">
-          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
-              {['序号','订单号','提出报错时间','手机号','来源','工作机','客户名单','状态','录单人','师傅','派单人','报错提出人','报错类型','报错详情','处理详情','处理时间','解决方案','解决人','解决时间','操作'].map(h => (
-                <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-             {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.reportTime}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.source}</td>
-                 <td className="px-3 py-2">{row.workPhone}</td>
-                 <td className="px-3 py-2">{row.clientName}</td>
-                 <td className="px-3 py-2 text-center"><span className="bg-red-50 text-red-500 border border-red-200 px-1 rounded">{row.status}</span></td>
-                 <td className="px-3 py-2">{row.recorder}</td>
-                 <td className="px-3 py-2">{row.master}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2">{row.reporter}</td>
-                 <td className="px-3 py-2">{row.type}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.detail}>{row.detail}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.processDetail}>{row.processDetail}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.processTime}</td>
-                 <td className="px-3 py-2">{row.solution}</td>
-                 <td className="px-3 py-2">{row.solver}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.solveTime}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer whitespace-nowrap">详情 修改 解决</td>
-               </tr>
-             ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-2 text-xs text-slate-500 px-2 flex justify-end">共 20 条</div>
-    </div>
-  );
-};
-
-// 3. 直派订单视图
-const DirectDispatchView = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const data = generateDirectDispatchData();
-
-  return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={<div className="flex gap-2"><button className="bg-blue-600 text-white px-3 py-1 text-xs rounded">充值</button><button className="bg-blue-400 text-white px-3 py-1 text-xs rounded">一键导出</button></div>}>
-         <div className="flex flex-wrap gap-3 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/第三方客户名称</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">分机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-24" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">创建人</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-24" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">报名时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">状态</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">来源</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs ml-auto">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
-         </div>
-      </FilterContainer>
-
-      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
-        <table className="w-full text-left border-collapse text-xs">
-          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
-              {['序号','商家名称','商家订单号','订单号','订单状态','地域','详细地址','详情','来源','工作机','客户名单','师傅','订单创建人','师傅id','创建人id','操作时间','取消原因','取消详情','录单时间','接单时间','总金额','成本','业绩','实付金额','垫付金额','剩余尾款','备注','完工收入','客户地图','操作'].map(h => (
-                <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-             {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.merchant}</td>
-                 <td className="px-3 py-2">{row.merchantOrderNo}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2">{row.status}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.region}</td>
-                 <td className="px-3 py-2 max-w-[150px] truncate">{row.address}</td>
-                 <td className="px-3 py-2">{row.detail}</td>
-                 <td className="px-3 py-2">{row.source}</td>
-                 <td className="px-3 py-2">{row.workPhone}</td>
-                 <td className="px-3 py-2">{row.clientName}</td>
-                 <td className="px-3 py-2">{row.master}</td>
-                 <td className="px-3 py-2">{row.creator}</td>
-                 <td className="px-3 py-2">{row.masterId}</td>
-                 <td className="px-3 py-2">{row.creatorId}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.opTime}</td>
-                 <td className="px-3 py-2">{row.cancelReason}</td>
-                 <td className="px-3 py-2">{row.cancelTime}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.recordTime}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.receiveTime}</td>
-                 <td className="px-3 py-2">{row.total}</td>
-                 <td className="px-3 py-2">{row.cost}</td>
-                 <td className="px-3 py-2">{row.revenue}</td>
-                 <td className="px-3 py-2">{row.paid}</td>
-                 <td className="px-3 py-2">{row.deposit}</td>
-                 <td className="px-3 py-2">{row.rest}</td>
-                 <td className="px-3 py-2">{row.remark}</td>
-                 <td className="px-3 py-2">{row.finishIncome}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer">{row.map}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer">详情 修改</td>
-               </tr>
-             ))}
-          </tbody>
-        </table>
-      </div>
-       <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2">
-         <button className="border px-2 py-0.5 rounded">1</button>
-         <span>...</span>
-         <span className="text-slate-400">共 1 页</span>
-       </div>
-    </div>
-  );
-};
-
-// 4. 派单业绩视图
-const DispatchPerformanceView = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const data = generatePerformanceData();
-
-  return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
-         <div className="flex flex-wrap gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">派单员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">完成时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /> <span className="text-xs">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">收款时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /> <span className="text-xs">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
-         </div>
-      </FilterContainer>
-
-      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
-        <table className="w-full text-left border-collapse text-xs">
-          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
-              <th className="px-3 py-2 font-medium text-slate-700">序号</th>
-              <th className="px-3 py-2 font-medium text-slate-700">派单员</th>
-              <th className="px-3 py-2 font-medium text-slate-700">总业绩</th>
-              <th className="px-3 py-2 font-medium text-slate-700">手动派单线下业绩</th>
-              <th className="px-3 py-2 font-medium text-slate-700">手动派单平台业绩</th>
-              <th className="px-3 py-2 font-medium text-slate-700">手动派单总业绩</th>
-              <th className="px-3 py-2 font-medium text-slate-700">自动派单线下业绩</th>
-              <th className="px-3 py-2 font-medium text-slate-700">自动派单平台业绩</th>
-              <th className="px-3 py-2 font-medium text-slate-700">自动派单总业绩</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-             {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2 text-orange-600 font-bold">{row.total}</td>
-                 <td className="px-3 py-2">{row.manualOffline}</td>
-                 <td className="px-3 py-2">{row.manualPlatform}</td>
-                 <td className="px-3 py-2">{row.manualTotal}</td>
-                 <td className="px-3 py-2">{row.autoOffline}</td>
-                 <td className="px-3 py-2">{row.autoPlatform}</td>
-                 <td className="px-3 py-2">{row.autoTotal}</td>
-               </tr>
-             ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
-
-// 5. 改单记录视图
-const ChangeRecordView = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const data = generateChangeData();
-
-  return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <div className="mb-2">
-        <DataOverview items={[{ label: '记录总数', value: 20 }, { label: '今日新增', value: 5 }]} />
-      </div>
-      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
-         <div className="flex gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-48" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">操作人员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
-         </div>
-      </FilterContainer>
-
-      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
-        <table className="w-full text-left border-collapse text-xs">
-          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
-              <th className="px-3 py-2 font-medium text-slate-700">序号</th>
-              <th className="px-3 py-2 font-medium text-slate-700">编号</th>
-              <th className="px-3 py-2 font-medium text-slate-700">订单号</th>
-              <th className="px-3 py-2 font-medium text-slate-700">更新时间</th>
-              <th className="px-3 py-2 font-medium text-slate-700">手机号</th>
-              <th className="px-3 py-2 font-medium text-slate-700">操作人员</th>
-              <th className="px-3 py-2 font-medium text-slate-700">操作</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-             {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-center">{row.seq}</td>
-                 <td className="px-3 py-2">{row.orderNo}</td>
-                 <td className="px-3 py-2">{row.updateTime}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.operator}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer">查看详情</td>
-               </tr>
-             ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2 items-center">
-         <span>共 20 条</span>
-         <select className="border text-xs"><option>10条/页</option></select>
-         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded">1</button>
-         <button className="border px-2 py-0.5 rounded">2</button>
-         <button className="border px-2 py-0.5 rounded">3</button>
-         <span>...</span>
-         <button className="border px-2 py-0.5 rounded">24</button>
-         <button className="border px-2 py-0.5 rounded">{'>'}</button>
-         <span>前往 <input className="w-8 border text-center"/> 页</span>
-       </div>
-    </div>
-  );
-};
-
-// 6. 长期订单视图
-const LongTermOrderView = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const data = generateLongTermData();
-
-  return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <div className="mb-2">
-         <DataOverview items={[{ label: '长期订单总数', value: 20 }, { label: '待处理', value: 4 }]} />
-      </div>
-      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
-         <div className="flex flex-wrap gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">师傅</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">状态</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">创建时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /> <span className="text-xs">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
-         </div>
-      </FilterContainer>
-
-      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
-        <table className="w-full text-left border-collapse text-xs">
-          <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
-              {['序号','订单号','手机号','客户名称','状态','师傅','录单人','派单人','创建时间','原因','佐证材料'].map(h => (
-                <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-             {data.map((row, i) => (
-               <tr key={row.id} className="hover:bg-blue-50">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.orderNo}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.clientName}</td>
-                 <td className="px-3 py-2">{row.status}</td>
-                 <td className="px-3 py-2">{row.master}</td>
-                 <td className="px-3 py-2">{row.recorder}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.createTime}</td>
-                 <td className="px-3 py-2">{row.reason}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer flex items-center gap-1">
-                   {row.material}
-                   {i%2===0 && <span className="bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{i%3+1}</span>}
-                 </td>
-               </tr>
-             ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2 items-center">
-         <span>共 20 条</span>
-         <select className="border text-xs"><option>10条/页</option></select>
-         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded">1</button>
-         <button className="border px-2 py-0.5 rounded">2</button>
-         <button className="border px-2 py-0.5 rounded">3</button>
-         <span>...</span>
-         <button className="border px-2 py-0.5 rounded">9</button>
-         <button className="border px-2 py-0.5 rounded">{'>'}</button>
-         <span>前往 <input className="w-8 border text-center"/> 页</span>
-       </div>
-    </div>
-  );
-};
-
-// --- 工具组件 ---
-
-const TooltipCell = ({ content, maxWidthClass, showTooltip }: { content: string, maxWidthClass: string, showTooltip: boolean }) => (
-  <div className={`relative group cursor-pointer ${maxWidthClass}`}>
-    <div className="truncate text-xs text-slate-700">{content}</div>
-    {showTooltip && (
-      <div className="absolute z-50 bg-slate-800 text-white text-xs p-2 rounded shadow-lg -top-8 left-0 whitespace-nowrap">
-        {content}
-      </div>
-    )}
-  </div>
-);
-
-// --- Missing Components ---
-
-const ActionBar = ({ 
-  onRecord, 
-  isSearchOpen, 
-  onToggleSearch 
-}: { 
-  onRecord: () => void; 
-  isSearchOpen: boolean; 
-  onToggleSearch: () => void;
-}) => {
-  return (
-    <div className="flex items-center justify-between mb-3 bg-white p-2 rounded-lg shadow-sm border border-gray-100">
-      <div className="flex gap-2">
-        <button onClick={onRecord} className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-2 rounded shadow hover:shadow-md transition-all active:scale-95 text-xs font-bold">
-          <Plus size={16} /> 录单
-        </button>
-        <button className="flex items-center gap-1 bg-white border border-gray-200 text-slate-700 px-3 py-2 rounded hover:bg-gray-50 transition-colors text-xs font-medium">
-          <Upload size={14} /> 导入
-        </button>
-        <button className="flex items-center gap-1 bg-white border border-gray-200 text-slate-700 px-3 py-2 rounded hover:bg-gray-50 transition-colors text-xs font-medium">
-          <FileText size={14} /> 导出
-        </button>
-      </div>
-      <button 
-        onClick={onToggleSearch}
-        className={`flex items-center gap-1.5 px-4 py-2 rounded text-xs font-medium transition-all
-          ${isSearchOpen ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-      >
-        <Search size={14} />
-        {isSearchOpen ? '收起筛选' : '高级筛选'}
-        {isSearchOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-      </button>
-    </div>
-  );
-};
-
-const SearchPanel = ({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) => {
-  if (!isOpen) return null;
-  return (
-    <div className="bg-[#F0F7FF] border border-blue-200 rounded-lg p-3 mb-3 shadow-sm animate-in fade-in slide-in-from-top-2">
-      <div className="flex flex-wrap gap-y-3 items-center">
-        {/* Row 1 */}
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-12 text-right mr-2">关键词</label>
-           <input className="w-32 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="订单号/手机/客户..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">分机</label>
-           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-12 text-right mr-2">创建人</label>
-           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">项目</label>
-           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="服务项目..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">地域</label>
-           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">状态</label>
-           <select className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none bg-white">
-             <option>全部</option>
-             <option>待派单</option>
-             <option>已完成</option>
-             <option>作废</option>
-           </select>
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">来源</label>
-           <select className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none bg-white">
-             <option>全部</option>
-             <option>美团</option>
-             <option>58同城</option>
-           </select>
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">方式</label>
-           <select className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none bg-white">
-             <option>全部</option>
-           </select>
-        </div>
-        <div className="flex items-center">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">补款</label>
-           <select className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none bg-white">
-             <option>全部</option>
-           </select>
-        </div>
-
-        {/* Row 2 */}
-        <div className="w-full h-0"></div> {/* Force break */}
-
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-12 text-right mr-2">工作机</label>
-           <input className="w-32 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-10 text-right mr-2">派单员</label>
-           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">师傅</label>
-           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-20 text-right mr-2">线下师傅手机</label>
-           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
-        </div>
-        <div className="flex items-center mr-4">
-           <label className="text-xs font-bold text-slate-600 w-8 text-right mr-2">比例</label>
-           <input className="w-24 h-8 border border-gray-300 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
-        </div>
-        
-        {/* Date Group with attached select */}
-        <div className="flex items-center mr-4">
-           <div className="flex rounded border border-gray-300 bg-white overflow-hidden h-8">
-             <select className="h-full px-2 text-xs focus:outline-none bg-white border-r border-gray-200 text-slate-700 font-bold min-w-[80px]">
-               <option>创建时间</option>
-               <option>完成时间</option>
-               <option>收款时间</option>
-               <option>服务时间</option>
-             </select>
-             <div className="flex items-center px-2">
-                <Calendar size={14} className="text-slate-400 mr-2" />
-                <input type="text" className="w-28 text-xs outline-none text-slate-600" placeholder="年 / 月 / 日 --:--" />
-                <span className="text-slate-400 mx-1">-</span>
-                <input type="text" className="w-28 text-xs outline-none text-slate-600" placeholder="年 / 月 / 日 --:--" />
-             </div>
-           </div>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex items-center gap-2 ml-auto">
-           <button className="px-4 h-8 bg-white border border-gray-300 rounded text-xs text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors">重置</button>
-           <button className="px-5 h-8 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 flex items-center gap-1 shadow-sm shadow-blue-200 transition-colors">
-             <Search size={13} />
-             搜索
-           </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ServiceItemCell = ({ item, warranty }: { item: string; warranty: string }) => (
-  <div className="flex flex-col">
-    <span className="font-bold text-slate-800 text-[13px]">{item}</span>
-    <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
-       <CheckCircle size={10} /> 质保: {warranty}
-    </span>
-  </div>
-);
-
-const StatusCell = ({ order }: { order: Order }) => {
-  const getStatusStyle = (status: OrderStatus) => {
-    switch (status) {
-      case OrderStatus.PendingDispatch: return 'bg-orange-50 text-orange-600 border-orange-100';
-      case OrderStatus.Completed: return 'bg-green-50 text-green-600 border-green-100';
-      case OrderStatus.Void: return 'bg-gray-100 text-gray-500 border-gray-200';
-      case OrderStatus.Returned: return 'bg-red-50 text-red-600 border-red-100';
-      case OrderStatus.Error: return 'bg-yellow-50 text-yellow-600 border-yellow-100';
-      default: return 'bg-slate-50 text-slate-600';
-    }
-  };
-  return (
-    <div className={`px-2 py-1 rounded border text-[11px] font-bold text-center whitespace-nowrap ${getStatusStyle(order.status)}`}>
-      {order.status}
-    </div>
-  );
-};
-
-const CombinedIdCell = ({ orderNo, workOrderNo, hasAdvancePayment, depositAmount }: { orderNo: string; workOrderNo: string; hasAdvancePayment: boolean; depositAmount?: number }) => (
-  <div className="flex flex-col gap-0.5">
-    <div className="flex items-center gap-1">
-      <span className="text-blue-600 font-medium text-[11px] cursor-pointer hover:underline" title="点击复制">{orderNo}</span>
-      <Copy size={10} className="text-slate-300 cursor-pointer hover:text-blue-500" />
-    </div>
-    <div className="text-[10px] text-slate-400">{workOrderNo}</div>
-    {hasAdvancePayment && (
-      <div className="flex items-center gap-1 mt-0.5">
-         <span className="bg-red-50 text-red-600 border border-red-100 text-[9px] px-1 rounded">垫</span>
-         {depositAmount && <span className="text-[9px] text-slate-500">¥{depositAmount}</span>}
-      </div>
-    )}
-  </div>
-);
-
-const CombinedTimeCell = ({ recordTime, dispatchTime }: { recordTime: string; dispatchTime: string }) => (
-  <div className="flex flex-col gap-1">
-    <div className="flex items-center gap-1 text-[10px] text-slate-500" title="录单时间">
-      <Clock size={10} /> {recordTime.split(' ')[1]}
-    </div>
-    <div className="flex items-center gap-1 text-[10px] text-blue-600 font-medium bg-blue-50 px-1 rounded w-fit" title="上门时间">
-      <Calendar size={10} /> {dispatchTime.split(' ')[0]}
-    </div>
-  </div>
-);
-
-const ReminderCell = ({ order, onRemind }: { order: Order; onRemind: (id: number) => void }) => (
-  <button 
-    onClick={() => !order.isReminded && onRemind(order.id)}
-    className={`flex items-center justify-center w-full py-1 rounded transition-all ${order.isReminded ? 'text-gray-300 cursor-not-allowed' : 'text-orange-500 hover:bg-orange-50'}`}
-    disabled={order.isReminded}
-  >
-    <Bell size={16} className={order.isReminded ? '' : 'animate-pulse'} />
-  </button>
-);
-
-const ActionCell = ({ orderId, onAction }: { orderId: number; onAction: (action: string, id: number) => void }) => (
-  <div className="relative group flex justify-center">
-    <button className="text-slate-400 hover:text-blue-600 p-1">
-      <Settings size={16} />
-    </button>
-    {/* Simple Dropdown on hover */}
-    <div className="absolute right-0 top-6 hidden group-hover:block bg-white border border-gray-200 shadow-xl rounded z-50 w-24 py-1">
-      <button onClick={() => onAction('详情', orderId)} className="block w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-600">详情</button>
-      <button onClick={() => onAction('完单', orderId)} className="block w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-600">完单</button>
-      <button onClick={() => onAction('作废', orderId)} className="block w-full text-left px-3 py-1.5 text-xs text-red-600 hover:bg-red-50">作废</button>
-    </div>
-  </div>
-);
-
-const Pagination = ({ total, current, pageSize, onPageChange, onSizeChange }: any) => {
-  const totalPages = Math.ceil(total / pageSize);
-
-  // A simple way to handle page range to match the screenshot style (1 2 3 4 5 6 7)
-  const getPageRange = () => {
-      const pages = [];
-      const maxVisible = 7;
-      let start = Math.max(1, current - Math.floor(maxVisible / 2));
-      let end = Math.min(totalPages, start + maxVisible - 1);
-      
-      if (end - start + 1 < maxVisible) {
-          start = Math.max(1, end - maxVisible + 1);
-      }
-
-      for(let i=start; i<=end; i++) pages.push(i);
-      return pages;
-  };
-
-  return (
-    <div className="flex items-center text-sm text-slate-500 select-none">
-      <span className="mr-3 text-slate-600 text-xs">共 {total} 条</span>
-      
-      <div className="relative mr-3">
-         <select 
-            value={pageSize} 
-            onChange={(e) => onSizeChange(Number(e.target.value))}
-            className="appearance-none h-8 pl-3 pr-8 border border-slate-300 rounded hover:border-blue-400 focus:border-blue-500 outline-none bg-white cursor-pointer text-slate-600 text-xs font-medium"
-         >
-           <option value={10}>10条/页</option>
-           <option value={20}>20条/页</option>
-           <option value={50}>50条/页</option>
-         </select>
-         <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-      </div>
-      
-      <div className="flex items-center gap-1.5 mr-3">
-         <button 
-           onClick={() => onPageChange(Math.max(1, current - 1))}
-           disabled={current === 1}
-           className="w-8 h-8 flex items-center justify-center border border-slate-300 rounded bg-white text-slate-500 hover:border-blue-400 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-         >
-           <ChevronLeft size={16} strokeWidth={1.5} />
-         </button>
-
-         {getPageRange().map(p => (
-            <button
-              key={p}
-              onClick={() => onPageChange(p)}
-              className={`w-8 h-8 flex items-center justify-center border rounded transition-colors font-medium text-xs
-                ${current === p 
-                  ? 'bg-blue-600 border-blue-600 text-white shadow-sm' 
-                  : 'bg-white border-slate-300 text-slate-600 hover:border-blue-400 hover:text-blue-600'
-                }`}
-            >
-              {p}
-            </button>
-         ))}
-
-         <button 
-           onClick={() => onPageChange(Math.min(totalPages, current + 1))}
-           disabled={current === totalPages}
-           className="w-8 h-8 flex items-center justify-center border border-slate-300 rounded bg-white text-slate-500 hover:border-blue-400 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-         >
-           <ChevronRight size={16} strokeWidth={1.5} />
-         </button>
-      </div>
-
-      <div className="flex items-center gap-2 text-xs">
-         <span className="text-slate-600">前往</span>
-         <input 
-           type="text"
-           className="w-10 h-8 border border-slate-300 rounded text-center outline-none focus:border-blue-500 hover:border-blue-400 text-slate-600"
-           defaultValue={current}
-           key={current} // force re-render on external change
-           onBlur={(e) => {
-             const val = parseInt(e.target.value);
-             if(!isNaN(val) && val >=1 && val <= totalPages) {
-                onPageChange(val);
-             } else {
-                e.target.value = current.toString();
-             }
-           }}
-           onKeyDown={(e) => {
-             if(e.key === 'Enter') {
-                const val = parseInt(e.currentTarget.value);
-                if(!isNaN(val) && val >=1 && val <= totalPages) {
-                    onPageChange(val);
-                }
-             }
-           }}
-         />
-         <span className="text-slate-600">页</span>
-      </div>
-    </div>
-  );
-};
-
-const ModalOverlay = ({ children, onClose }: { children?: React.ReactNode; onClose: () => void }) => {
-  return createPortal(
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="absolute inset-0" onClick={onClose} />
-      <div className="bg-white rounded-xl shadow-2xl relative z-10 animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-auto">
-        {children}
-      </div>
-    </div>,
-    document.body
-  );
-};
-
-const RecordOrderModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  if (!isOpen) return null;
-  return (
-    <ModalOverlay onClose={onClose}>
-      <div className="w-[600px] p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-bold text-slate-800">录入新订单</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={20}/></button>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-           {/* Simple placeholders for the form */}
-           <div className="col-span-2"><label className="block text-xs font-medium text-slate-500 mb-1">客户手机</label><input className="w-full border p-2 rounded text-sm"/></div>
-           <div><label className="block text-xs font-medium text-slate-500 mb-1">服务项目</label><input className="w-full border p-2 rounded text-sm"/></div>
-           <div><label className="block text-xs font-medium text-slate-500 mb-1">预约时间</label><input type="datetime-local" className="w-full border p-2 rounded text-sm"/></div>
-           <div className="col-span-2"><label className="block text-xs font-medium text-slate-500 mb-1">详细地址</label><textarea className="w-full border p-2 rounded text-sm h-20"/></div>
-        </div>
-        <div className="mt-6 flex justify-end gap-3">
-           <button onClick={onClose} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded">取消</button>
-           <button onClick={onClose} className="px-6 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-medium">确认录入</button>
-        </div>
-      </div>
-    </ModalOverlay>
-  );
-};
-
-const CompleteOrderModal = ({ isOpen, onClose, order }: { isOpen: boolean; onClose: () => void; order: Order | null }) => {
-  if (!isOpen) return null;
-  return (
-    <ModalOverlay onClose={onClose}>
-      <div className="w-[500px] p-6">
-         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-bold text-slate-800">订单完结结算</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={20}/></button>
-        </div>
-        <div className="bg-slate-50 p-3 rounded mb-4 text-sm text-slate-700">
-           当前订单：<span className="font-bold">{order?.orderNo}</span>
-        </div>
-        <div className="space-y-4">
-           <div><label className="block text-xs font-medium text-slate-500 mb-1">实际收款金额</label><div className="relative"><span className="absolute left-3 top-2 text-slate-500">¥</span><input className="w-full border pl-6 p-2 rounded text-sm font-bold text-orange-600" defaultValue={order?.totalAmount} /></div></div>
-           <div><label className="block text-xs font-medium text-slate-500 mb-1">完工备注</label><textarea className="w-full border p-2 rounded text-sm h-20"/></div>
-        </div>
-        <div className="mt-6 flex justify-end gap-3">
-           <button onClick={onClose} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded">取消</button>
-           <button onClick={onClose} className="px-6 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700 font-medium">确认完工</button>
-        </div>
-      </div>
-    </ModalOverlay>
-  );
-};
-
-const ChatModal = ({ isOpen, onClose, role, order }: { isOpen: boolean; onClose: () => void; role: string; order: Order | null }) => {
-  if (!isOpen) return null;
-  return (
-    <ModalOverlay onClose={onClose}>
-      <div className="w-[400px] h-[600px] flex flex-col">
-        <div className="flex justify-between items-center p-4 border-b bg-slate-50 rounded-t-xl">
-           <div className="flex items-center gap-2">
-             <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><MessageCircle size={16}/></div>
-             <div>
-               <div className="text-sm font-bold text-slate-800">联系{role}</div>
-               <div className="text-[10px] text-slate-500">订单: {order?.orderNo}</div>
-             </div>
-           </div>
-           <button onClick={onClose}><X size={18} className="text-slate-400"/></button>
-        </div>
-        <div className="flex-1 bg-white p-4 overflow-y-auto space-y-3">
-           <div className="flex justify-center"><span className="text-[10px] text-slate-300 bg-slate-50 px-2 py-0.5 rounded-full">今天 10:23</span></div>
-           <div className="flex gap-2">
-              <div className="w-8 h-8 rounded-full bg-slate-200 flex-shrink-0"/>
-              <div className="bg-slate-100 p-2 rounded-tr-xl rounded-br-xl rounded-bl-xl text-xs text-slate-700 max-w-[80%]">你好，请问这个订单有什么问题吗？</div>
-           </div>
-           <div className="flex gap-2 flex-row-reverse">
-              <div className="w-8 h-8 rounded-full bg-blue-600 flex-shrink-0"/>
-              <div className="bg-blue-600 text-white p-2 rounded-tl-xl rounded-br-xl rounded-bl-xl text-xs max-w-[80%]">师傅说客户电话打不通，麻烦核实一下。</div>
-           </div>
-        </div>
-        <div className="p-3 border-t">
-           <div className="flex gap-2">
-             <input className="flex-1 border rounded-full px-4 py-2 text-sm outline-none focus:border-blue-500" placeholder="发送消息..." />
-             <button className="w-9 h-9 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700"><Send size={16}/></button>
-           </div>
-        </div>
-      </div>
-    </ModalOverlay>
-  );
-};
-
 // --- 完整的 App 组件 ---
 const App = () => {
   const [activeTab, setActiveTab] = useState('订单管理');
@@ -1849,7 +1550,7 @@ const App = () => {
   const [chatState, setChatState] = useState<{isOpen: boolean; role: string; order: Order | null;}>({ isOpen: false, role: '', order: null });
   const [hoveredTooltipCell, setHoveredTooltipCell] = useState<{rowId: number, colKey: 'address' | 'details' | 'service'} | null>(null);
 
-  // 原始的订单管理 Tab 处理函数
+  // ... [Keep handlers] ...
   const handleRemindOrder = (id: number) => {
      setOrders(prevOrders => prevOrders.map(order => 
         order.id === id ? { ...order, isReminded: true } : order
@@ -1895,6 +1596,7 @@ const App = () => {
               <div className="overflow-x-auto flex-1 overflow-y-auto relative">
                 <table className="w-full text-left border-collapse relative">
                   <thead className="sticky top-0 z-40 shadow-sm">
+                    {/* ... header rows ... */}
                     <tr className="bg-slate-50 border-b-2 border-gray-300 text-base font-bold uppercase text-slate-700 tracking-wider">
                       <th className="px-2 py-2 whitespace-nowrap w-[110px] bg-slate-50 text-center sticky top-0 z-30">手机号</th>
                       <th className="px-2 py-2 w-[140px] whitespace-nowrap bg-slate-50 sticky top-0 z-30">项目/质保期</th>
@@ -1922,14 +1624,12 @@ const App = () => {
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">是否已读</th>
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">是否拨打</th>
                       
-                      {/* 注意：以下列在初始视图中会被右侧固定列遮挡，滑动横条才会出现 */}
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">质保期</th>
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">工作机</th>
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">客户姓名</th>
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">派单员</th>
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">录单员</th>
                       
-                      {/* 改动：师傅列变为师傅/手机号 */}
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">师傅/手机号</th>
                       
                       <th className="px-2 py-2 whitespace-nowrap bg-slate-50 text-center sticky top-0 z-30">总收款</th>
@@ -1953,14 +1653,14 @@ const App = () => {
                       <th className="px-2 py-2 text-center sticky-th-solid sticky-col sticky-right-action whitespace-nowrap w-[70px] border-l border-gray-200">操作</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-300">
+                  {/* Updated main table tbody to match the requested style */}
+                  <tbody className="divide-y divide-slate-300">
                     {currentData.map((order, index) => (
-                      <tr key={order.id} onMouseLeave={handleMouseEnterOther} className="bg-white even:bg-blue-50 hover:!bg-blue-100 transition-colors group border-b border-gray-300 last:border-0 align-middle">
+                      <tr key={order.id} onMouseLeave={handleMouseEnterOther} className="bg-white even:bg-blue-50 hover:!bg-blue-100 transition-colors group border-b border-slate-300 last:border-0 align-middle">
                         
-                        {/* 手机号: 增加字号 */}
+                        {/* ... table cells ... */}
                         <td className="px-2 py-2 text-slate-800 font-bold text-[12px] tabular-nums whitespace-nowrap align-middle text-center" onMouseEnter={handleMouseEnterOther}>{order.mobile}</td>
                         
-                        {/* 服务项目: 增加字号 */}
                         <td className="px-2 py-2 align-middle whitespace-nowrap" onMouseEnter={handleMouseEnterOther}>
                           <ServiceItemCell item={order.serviceItem} warranty={order.warrantyPeriod} />
                         </td>
@@ -1969,12 +1669,10 @@ const App = () => {
                           <StatusCell order={order} />
                         </td>
 
-                        {/* 系数: 增加字号 */}
                         <td className="px-2 py-2 text-center align-middle" onMouseEnter={handleMouseEnterOther}>
                             <span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-bold text-[13px]">{order.weightedCoefficient.toFixed(1)}</span>
                         </td>
 
-                        {/* 地域: 不变 */}
                         <td className="px-2 py-2 text-slate-700 whitespace-nowrap align-middle text-center text-[12px]" onMouseEnter={handleMouseEnterOther}>
                             <div className="relative pr-8 inline-block"> 
                                 {order.region}
@@ -1984,76 +1682,61 @@ const App = () => {
                             </div>
                         </td>
                         
-                        {/* 详细地址: 不变 */}
                         <td className="px-2 py-2 align-middle" onMouseEnter={() => setHoveredTooltipCell({rowId: order.id, colKey: 'address'})}>
                           <TooltipCell content={order.address} maxWidthClass="max-w-[120px]" showTooltip={hoveredTooltipCell?.rowId === order.id && hoveredTooltipCell?.colKey === 'address'} />
                         </td>
                         
-                        {/* 详情: 不变 */}
                         <td className="px-2 py-2 align-middle" onMouseEnter={() => setHoveredTooltipCell({rowId: order.id, colKey: 'details'})}>
                           <TooltipCell content={order.details} maxWidthClass="max-w-[140px]" showTooltip={hoveredTooltipCell?.rowId === order.id && hoveredTooltipCell?.colKey === 'details'} />
                         </td>
                         
-                        {/* 建议分成: 增加字号 12 -> 14 */}
                         <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[14px]" onMouseEnter={handleMouseEnterOther}>
                            {order.serviceRatio}
                         </td>
                         
-                        {/* 建议方式: 增加字号 */}
                         <td className="px-2 py-2 text-center align-middle" onMouseEnter={handleMouseEnterOther}>
                            <span className="px-2 py-0.5 rounded border border-gray-200 bg-gray-50 text-[11px] text-gray-600 whitespace-nowrap">{order.suggestedMethod}</span>
                         </td>
 
-                         {/* 划线价: 增加字号 */}
                         <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[13px]" onMouseEnter={handleMouseEnterOther}>
                            {formatCurrency(order.guidePrice)}
                         </td>
 
-                         {/* 历史价: 增加字号 */}
                         <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[13px]" onMouseEnter={handleMouseEnterOther}>
                            {order.historicalPrice}
                         </td>
 
-                        {/* 来源: 增加字号 */}
                         <td className="px-2 py-2 align-middle text-center" onMouseEnter={handleMouseEnterOther}><span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[11px] border border-slate-200 whitespace-nowrap font-medium">{order.source}</span></td>
                         
-                        {/* 订单/工单号: 不变 */}
                         <td className="px-2 py-2 align-middle" onMouseEnter={handleMouseEnterOther}>
                             <CombinedIdCell orderNo={order.orderNo} workOrderNo={order.workOrderNo} hasAdvancePayment={order.hasAdvancePayment} depositAmount={order.depositAmount} />
                         </td>
 
-                        {/* 录单/上门时间: 不变 */}
                         <td className="px-2 py-2 align-middle" onMouseEnter={handleMouseEnterOther}>
                             <CombinedTimeCell recordTime={order.recordTime} dispatchTime={order.dispatchTime} />
                         </td>
 
-                        {/* 资源: 不变 */}
                         <td className="px-2 py-2 align-middle text-center" onMouseEnter={handleMouseEnterOther}>
                             <button className="text-blue-600 hover:bg-blue-50 p-1 rounded transition-colors"><Search size={14} /></button>
                         </td>
 
-                        {/* --- 新增列内容 (24列) --- */}
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap">{order.hasCoupon ? <Check size={14} className="text-green-500 mx-auto"/> : <span className="text-gray-300">-</span>}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap">{order.isCouponVerified ? <span className="text-green-600 font-bold text-[13px]">是</span> : <span className="text-gray-400 text-[13px]">否</span>}</td>
                         
-                        {/* 是否已读 */}
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap">
                             {order.isRead ? <span className="text-gray-400 text-[12px]">已读</span> : <span className="text-orange-500 text-[12px]">未读</span>}
                         </td>
                         
-                        {/* 是否拨打 */}
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap">
                             {order.isCalled ? <span className="text-gray-400 text-[12px]">已拨打</span> : <span className="text-orange-500 text-[12px]">未拨打</span>}
                         </td>
                         
-                        {/* 增加字号 */}
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px]">{order.warrantyPeriod}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px]">{order.workPhone}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-700 font-medium text-[13px]">{order.customerName}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px]">{order.dispatcherName}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px]">{order.recorderName}</td>
                         
-                        {/* 改动：师傅列变为两行显示 */}
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap">
                             <div className="flex flex-col items-center">
                                 <span className="text-slate-700 font-medium text-[13px]">{order.masterName}</span>
@@ -2061,7 +1744,6 @@ const App = () => {
                             </div>
                         </td>
                         
-                        {/* 增加字号 */}
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-mono text-emerald-600 font-bold text-[13px]">{formatCurrency(order.totalReceipt)}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-mono text-slate-500 text-[13px]">{formatCurrency(order.cost)}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-mono text-orange-600 font-bold text-[13px]">{formatCurrency(order.revenue)}</td>
@@ -2070,12 +1752,10 @@ const App = () => {
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-mono text-slate-700 text-[13px]">{formatCurrency(order.otherReceipt)}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-mono text-slate-700 text-[13px]">{formatCurrency(order.completionIncome)}</td>
                         
-                        {/* 时间列: 增加字号 */}
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500">{order.serviceTime || '-'}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500">{order.completionTime || '-'}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500">{order.paymentTime || '-'}</td>
                         
-                        {/* 增加字号 */}
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-500 text-[12px]">{order.voiderNameAndReason || '-'}</td>
                         <td className="px-2 py-2 align-middle whitespace-nowrap"><TooltipCell content={order.voidDetails || '-'} maxWidthClass="max-w-[150px]" showTooltip={false} /></td>
                         <td className="px-2 py-2 align-middle whitespace-nowrap"><TooltipCell content={order.cancelReasonAndDetails || '-'} maxWidthClass="max-w-[150px]" showTooltip={false} /></td>
