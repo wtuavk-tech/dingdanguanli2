@@ -420,7 +420,7 @@ const FilterContainer = ({ isSearchOpen, onToggleSearch, extraButtons, children 
   <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-200 mb-2">
     <div className="flex justify-between items-center mb-2">
       <div className="flex items-center gap-2">
-         <button onClick={onToggleSearch} className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100">
+         <button onClick={onToggleSearch} className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100 font-sans">
            <Filter size={14} /> 筛选
            {isSearchOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
          </button>
@@ -432,11 +432,11 @@ const FilterContainer = ({ isSearchOpen, onToggleSearch, extraButtons, children 
 );
 
 const DataOverview = ({ items }: { items: { label: string; value: string | number }[] }) => (
-  <div className="flex gap-4 mb-2">
+  <div className="flex gap-4 mb-2 font-sans">
     {items.map((item, idx) => (
       <div key={idx} className="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200 flex flex-col">
-        <span className="text-xs text-slate-500">{item.label}</span>
-        <span className="text-lg font-bold text-slate-800">{item.value}</span>
+        <span className="text-xs text-slate-500 font-sans">{item.label}</span>
+        <span className="text-lg font-bold text-slate-800 font-sans">{item.value}</span>
       </div>
     ))}
   </div>
@@ -444,11 +444,11 @@ const DataOverview = ({ items }: { items: { label: string; value: string | numbe
 
 const Pagination = ({ total, current, pageSize, onPageChange, onSizeChange }: any) => (
   <div className="flex items-center gap-2 text-xs text-slate-500">
-    <span>共 {total} 条</span>
+    <span className="font-sans">共 <span className="font-mono">{total}</span> 条</span>
     <select 
       value={pageSize} 
       onChange={e => onSizeChange(Number(e.target.value))}
-      className="border rounded px-1 py-0.5"
+      className="border rounded px-1 py-0.5 font-mono"
     >
       {[10, 20, 50, 100].map(size => <option key={size} value={size}>{size}条/页</option>)}
     </select>
@@ -456,14 +456,14 @@ const Pagination = ({ total, current, pageSize, onPageChange, onSizeChange }: an
       <button 
         onClick={() => onPageChange(Math.max(1, current - 1))}
         disabled={current === 1}
-        className="px-2 py-0.5 border rounded disabled:opacity-50"
+        className="px-2 py-0.5 border rounded disabled:opacity-50 font-sans"
       >
         Prev
       </button>
-      <span className="px-2 py-0.5">{current}</span>
+      <span className="px-2 py-0.5 font-mono">{current}</span>
       <button 
         onClick={() => onPageChange(current + 1)} 
-        className="px-2 py-0.5 border rounded"
+        className="px-2 py-0.5 border rounded font-sans"
       >
         Next
       </button>
@@ -475,14 +475,14 @@ const NotificationBar = () => (
   <div className="bg-[#111827] text-white px-4 py-2.5 rounded-lg mb-3 flex items-center justify-between text-xs shadow-md border border-slate-800/50 overflow-hidden">
     <div className="flex items-center gap-6 overflow-hidden mr-4 flex-1">
       {/* Badge */}
-      <div className="flex items-center gap-1.5 bg-[#ef4444] text-white px-2 py-1 rounded-[4px] text-[11px] font-bold shrink-0 tracking-wide shadow-sm z-10 relative">
+      <div className="flex items-center gap-1.5 bg-[#ef4444] text-white px-2 py-1 rounded-[4px] text-[11px] font-bold shrink-0 tracking-wide shadow-sm z-10 relative font-sans">
         <span>重要公告</span>
         <Bell size={10} fill="currentColor" strokeWidth={3} />
       </div>
       
       {/* Scrolling Content */}
       <div className="flex-1 overflow-hidden relative h-5 group">
-        <div className="absolute whitespace-nowrap animate-marquee group-hover:pause flex items-center gap-12 text-slate-300 font-medium h-full">
+        <div className="absolute whitespace-nowrap animate-marquee group-hover:pause flex items-center gap-12 text-slate-300 font-medium h-full font-sans">
             <div className="flex items-center gap-2">
                <Megaphone size={14} className="text-[#ef4444]" />
                <span>通知：点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。</span>
@@ -539,7 +539,7 @@ const QuickNav = ({ activeTab, onTabChange }: { activeTab: string, onTabChange: 
         const isActive = activeTab === item;
 
         // Base styles
-        let buttonClass = "h-10 rounded-lg text-sm font-bold shadow-sm transition-all duration-200 border flex items-center justify-center gap-1 ";
+        let buttonClass = "h-10 rounded-lg text-sm font-bold shadow-sm transition-all duration-200 border flex items-center justify-center gap-1 font-sans ";
         
         if (isActive) {
            // Selected State
@@ -578,18 +578,18 @@ const QuickNav = ({ activeTab, onTabChange }: { activeTab: string, onTabChange: 
 const ActionBar = ({ onRecord, isSearchOpen, onToggleSearch }: any) => (
   <div className="flex justify-between items-center mb-2">
     <div className="flex gap-2">
-      <button onClick={onRecord} className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-blue-700 shadow-sm transition-all">
+      <button onClick={onRecord} className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-blue-700 shadow-sm transition-all font-sans">
         <Plus size={14} /> 录单
       </button>
-      <button className="flex items-center gap-1 bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs hover:bg-slate-50 transition-all">
+      <button className="flex items-center gap-1 bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs hover:bg-slate-50 transition-all font-sans">
         <Upload size={14} /> 导入
       </button>
     </div>
     <div className="flex gap-2">
-       <button onClick={onToggleSearch} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs transition-all border ${isSearchOpen ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-white text-slate-600 border-slate-300'}`}>
+       <button onClick={onToggleSearch} className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs transition-all border font-sans ${isSearchOpen ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-white text-slate-600 border-slate-300'}`}>
          <Filter size={14} /> 筛选
        </button>
-       <button className="flex items-center gap-1 bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs hover:bg-slate-50 transition-all">
+       <button className="flex items-center gap-1 bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs hover:bg-slate-50 transition-all font-sans">
          <RefreshCw size={14} /> 刷新
        </button>
     </div>
@@ -602,12 +602,12 @@ const SearchPanel = ({ isOpen, onToggle }: any) => {
     <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-3 animate-in slide-in-from-top-2 duration-200">
       <div className="grid grid-cols-6 gap-3">
          <div className="flex flex-col gap-1">
-           <label className="text-xs text-slate-500">订单号/手机号</label>
-           <input className="h-8 border border-slate-200 rounded px-2 text-xs focus:border-blue-500 outline-none" placeholder="请输入..." />
+           <label className="text-xs text-slate-500 font-sans">订单号/手机号</label>
+           <input className="h-8 border border-slate-200 rounded px-2 text-xs focus:border-blue-500 outline-none font-mono" placeholder="请输入..." />
          </div>
          <div className="flex items-end gap-2">
-            <button className="h-8 px-4 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 w-full">查询</button>
-            <button className="h-8 px-4 bg-slate-100 text-slate-600 rounded text-xs hover:bg-slate-200 w-full">重置</button>
+            <button className="h-8 px-4 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 w-full font-sans">查询</button>
+            <button className="h-8 px-4 bg-slate-100 text-slate-600 rounded text-xs hover:bg-slate-200 w-full font-sans">重置</button>
          </div>
       </div>
     </div>
@@ -616,8 +616,8 @@ const SearchPanel = ({ isOpen, onToggle }: any) => {
 
 const ServiceItemCell = ({ item, warranty }: any) => (
   <div className="flex flex-col">
-    <span className="font-medium text-slate-700 text-[13px]">{item}</span>
-    <span className="text-[11px] text-slate-400">保: {warranty}</span>
+    <span className="font-medium text-slate-700 text-[13px] font-sans">{item}</span>
+    <span className="text-[11px] text-slate-400 font-sans">保: {warranty}</span>
   </div>
 );
 
@@ -632,7 +632,7 @@ const StatusCell = ({ order }: { order: Order }) => {
     }
   };
   return (
-    <div className={`px-2 py-0.5 rounded text-[11px] border text-center font-medium ${getStatusColor(order.status)}`}>
+    <div className={`px-2 py-0.5 rounded text-[11px] border text-center font-medium font-sans ${getStatusColor(order.status)}`}>
       {order.status}
     </div>
   );
@@ -640,9 +640,9 @@ const StatusCell = ({ order }: { order: Order }) => {
 
 const TooltipCell = ({ content, maxWidthClass, showTooltip }: any) => (
   <div className={`relative group ${maxWidthClass}`}>
-    <div className="truncate text-slate-600 text-[13px] cursor-pointer">{content}</div>
+    <div className="truncate text-slate-600 text-[13px] cursor-pointer font-sans">{content}</div>
     {showTooltip && (
-      <div className="absolute bottom-full left-0 mb-1 bg-slate-800 text-white text-xs p-2 rounded shadow-lg z-50 whitespace-normal min-w-[200px]">
+      <div className="absolute bottom-full left-0 mb-1 bg-slate-800 text-white text-xs p-2 rounded shadow-lg z-50 whitespace-normal min-w-[200px] font-sans">
         {content}
       </div>
     )}
@@ -653,14 +653,14 @@ const CombinedIdCell = ({ orderNo, workOrderNo, hasAdvancePayment, depositAmount
   <div className="flex flex-col">
     <span className="text-[12px] text-blue-600 font-medium font-mono">{orderNo}</span>
     <span className="text-[11px] text-slate-400 font-mono">{workOrderNo}</span>
-    {hasAdvancePayment && <span className="text-[10px] text-orange-500 bg-orange-50 px-1 rounded w-fit mt-0.5">垫: {depositAmount}</span>}
+    {hasAdvancePayment && <span className="text-[10px] text-orange-500 bg-orange-50 px-1 rounded w-fit mt-0.5 font-mono">垫: {depositAmount}</span>}
   </div>
 );
 
 const CombinedTimeCell = ({ recordTime, dispatchTime }: any) => (
   <div className="flex flex-col">
-    <span className="text-[11px] text-slate-500">录: {recordTime}</span>
-    <span className="text-[11px] text-slate-500">派: {dispatchTime}</span>
+    <span className="text-[11px] text-slate-500 font-mono">录: {recordTime}</span>
+    <span className="text-[11px] text-slate-500 font-mono">派: {dispatchTime}</span>
   </div>
 );
 
@@ -688,10 +688,10 @@ const Modal = ({ isOpen, onClose, title, children }: any) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             <div className="bg-white rounded-xl shadow-2xl w-[600px] max-h-[90vh] overflow-hidden flex flex-col">
                 <div className="flex justify-between items-center p-4 border-b border-gray-100">
-                    <h3 className="font-bold text-lg text-slate-800">{title}</h3>
+                    <h3 className="font-bold text-lg text-slate-800 font-sans">{title}</h3>
                     <button onClick={onClose} className="p-1 rounded-full hover:bg-gray-100"><X size={20} className="text-slate-500" /></button>
                 </div>
-                <div className="p-6 overflow-y-auto flex-1">
+                <div className="p-6 overflow-y-auto flex-1 font-sans">
                     {children}
                 </div>
             </div>
@@ -702,9 +702,9 @@ const Modal = ({ isOpen, onClose, title, children }: any) => {
 
 const RecordOrderModal = ({ isOpen, onClose }: any) => (
     <Modal isOpen={isOpen} onClose={onClose} title="录入新订单">
-        <div className="space-y-4">
+        <div className="space-y-4 font-sans">
              <div className="grid grid-cols-2 gap-4">
-                 <div className="space-y-1"><label className="text-xs text-slate-500">客户手机</label><input className="w-full border p-2 rounded text-sm"/></div>
+                 <div className="space-y-1"><label className="text-xs text-slate-500">客户手机</label><input className="w-full border p-2 rounded text-sm font-mono"/></div>
                  <div className="space-y-1"><label className="text-xs text-slate-500">服务项目</label><input className="w-full border p-2 rounded text-sm"/></div>
              </div>
              <div className="flex justify-end pt-4">
@@ -716,9 +716,9 @@ const RecordOrderModal = ({ isOpen, onClose }: any) => (
 
 const CompleteOrderModal = ({ isOpen, onClose, order }: any) => (
     <Modal isOpen={isOpen} onClose={onClose} title="完成订单">
-        <div className="space-y-4">
-            <p className="text-sm text-slate-600">确认完成订单 <span className="font-bold">{order?.orderNo}</span> ?</p>
-             <div className="space-y-1"><label className="text-xs text-slate-500">收款金额</label><input className="w-full border p-2 rounded text-sm" placeholder="0.00"/></div>
+        <div className="space-y-4 font-sans">
+            <p className="text-sm text-slate-600">确认完成订单 <span className="font-bold font-mono">{order?.orderNo}</span> ?</p>
+             <div className="space-y-1"><label className="text-xs text-slate-500">收款金额</label><input className="w-full border p-2 rounded text-sm font-mono" placeholder="0.00"/></div>
              <div className="flex justify-end pt-4 gap-2">
                  <button onClick={onClose} className="bg-gray-100 text-slate-600 px-4 py-2 rounded text-sm hover:bg-gray-200">取消</button>
                  <button className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700">确认完单</button>
@@ -729,12 +729,12 @@ const CompleteOrderModal = ({ isOpen, onClose, order }: any) => (
 
 const ChatModal = ({ isOpen, onClose, role, order }: any) => (
     <Modal isOpen={isOpen} onClose={onClose} title={`与 ${role} 聊天 - ${order?.orderNo}`}>
-        <div className="h-64 bg-slate-50 rounded border border-slate-200 mb-4 p-4 flex flex-col items-center justify-center text-slate-400">
+        <div className="h-64 bg-slate-50 rounded border border-slate-200 mb-4 p-4 flex flex-col items-center justify-center text-slate-400 font-sans">
             <MessageCircle size={32} className="mb-2"/>
             <p>聊天记录为空</p>
         </div>
         <div className="flex gap-2">
-            <input className="flex-1 border p-2 rounded text-sm" placeholder="输入消息..."/>
+            <input className="flex-1 border p-2 rounded text-sm font-sans" placeholder="输入消息..."/>
             <button className="bg-blue-600 text-white px-4 py-2 rounded"><Send size={16}/></button>
         </div>
     </Modal>
@@ -750,18 +750,18 @@ const TransferRecordView = () => {
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          {/* ... filters ... */}
          <div className="flex gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-48" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">操作人员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">转给人</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-48 font-mono" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">操作人员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">转给人</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-sans" placeholder="请输入内容" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','订单号','创建时间','手机号','操作人员','转给人','备注','创建人'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -770,14 +770,14 @@ const TransferRecordView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.orderNo}</td>
-                 <td className="px-3 py-2">{row.createTime}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.operator}</td>
-                 <td className="px-3 py-2">{row.transferTo}</td>
-                 <td className="px-3 py-2">{row.remark}</td>
-                 <td className="px-3 py-2">{row.creator}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 font-mono">{row.orderNo}</td>
+                 <td className="px-3 py-2 font-mono">{row.createTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.mobile}</td>
+                 <td className="px-3 py-2 font-sans">{row.operator}</td>
+                 <td className="px-3 py-2 font-sans">{row.transferTo}</td>
+                 <td className="px-3 py-2 font-sans">{row.remark}</td>
+                 <td className="px-3 py-2 font-sans">{row.creator}</td>
                </tr>
              ))}
           </tbody>
@@ -785,15 +785,15 @@ const TransferRecordView = () => {
       </div>
       {/* ... pagination ... */}
       <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2 items-center">
-         <span>共 398 条</span>
-         <select className="border text-xs"><option>10条/页</option></select>
-         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded">1</button>
-         <button className="border px-2 py-0.5 rounded">2</button>
-         <button className="border px-2 py-0.5 rounded">3</button>
-         <span>...</span>
-         <button className="border px-2 py-0.5 rounded">60</button>
-         <button className="border px-2 py-0.5 rounded">{'>'}</button>
-         <span>前往 <input className="w-8 border text-center"/> 页</span>
+         <span className="font-sans">共 <span className="font-mono">398</span> 条</span>
+         <select className="border text-xs font-mono"><option>10条/页</option></select>
+         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded font-sans">1</button>
+         <button className="border px-2 py-0.5 rounded font-mono">2</button>
+         <button className="border px-2 py-0.5 rounded font-mono">3</button>
+         <span className="font-sans">...</span>
+         <button className="border px-2 py-0.5 rounded font-mono">60</button>
+         <button className="border px-2 py-0.5 rounded font-sans">{'>'}</button>
+         <span className="font-sans">前往 <input className="w-8 border text-center font-mono"/> 页</span>
        </div>
     </div>
   );
@@ -810,19 +810,19 @@ const DispatchRecordView = () => {
       <div className="mb-2">
          <DataOverview items={[{ label: '派单总数', value: 398 }, { label: '今日派单', value: 12 }]} />
       </div>
-      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={<button className="bg-green-500 text-white px-3 py-1 text-xs rounded">导出</button>}>
+      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={<button className="bg-green-500 text-white px-3 py-1 text-xs rounded font-sans">导出</button>}>
          <div className="grid grid-cols-6 gap-3">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">订单号/手机号</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap">派单时间</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /><span className="text-xs">-</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">派单员</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">上门师傅</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">师傅uid</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">派单类型</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">派单方式</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">状态</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">订单号/手机号</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" /></div>
+             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">派单时间</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" /><span className="text-xs font-sans">-</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">派单员</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">上门师傅</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">师傅uid</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">派单类型</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">派单方式</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">状态</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans"><option>请选择</option></select></div>
              <div className="col-span-1 flex gap-2">
-                <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs w-full">搜索</button>
-                <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs w-full">重置</button>
+                <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs w-full font-sans">搜索</button>
+                <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs w-full font-sans">重置</button>
              </div>
          </div>
       </FilterContainer>
@@ -830,7 +830,7 @@ const DispatchRecordView = () => {
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','订单号','派单时间','手机号','派单员','派单方式','技术服务费缴纳状态','派单类型','派单备注','完工图片','创建人','创建时间','状态','上门师傅','师傅uid','接单时间','预约上门时间','拒绝原因','抢接时间','完成时间','师傅备注','退回原因','退回时间','操作'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -839,36 +839,36 @@ const DispatchRecordView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.dispatchTime}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2">{row.method}</td>
-                 <td className="px-3 py-2">{row.techFeeStatus}</td>
-                 <td className="px-3 py-2">{row.type}</td>
-                 <td className="px-3 py-2">{row.remark}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.pic}</td>
-                 <td className="px-3 py-2">{row.creator}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.createTime}</td>
-                 <td className="px-3 py-2">{row.status}</td>
-                 <td className="px-3 py-2">{row.master}</td>
-                 <td className="px-3 py-2">{row.masterId}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.acceptTime}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.appointTime}</td>
-                 <td className="px-3 py-2">{row.rejectReason}</td>
-                 <td className="px-3 py-2">{row.grabTime}</td>
-                 <td className="px-3 py-2">{row.finishTime}</td>
-                 <td className="px-3 py-2">{row.masterRemark}</td>
-                 <td className="px-3 py-2">{row.returnReason}</td>
-                 <td className="px-3 py-2">{row.returnTime}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer whitespace-nowrap">详情 修改 解决</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600 font-mono">{row.orderNo}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.dispatchTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.mobile}</td>
+                 <td className="px-3 py-2 font-sans">{row.dispatcher}</td>
+                 <td className="px-3 py-2 font-sans">{row.method}</td>
+                 <td className="px-3 py-2 font-sans">{row.techFeeStatus}</td>
+                 <td className="px-3 py-2 font-sans">{row.type}</td>
+                 <td className="px-3 py-2 font-sans">{row.remark}</td>
+                 <td className="px-3 py-2 text-blue-600 font-sans">{row.pic}</td>
+                 <td className="px-3 py-2 font-sans">{row.creator}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.createTime}</td>
+                 <td className="px-3 py-2 font-sans">{row.status}</td>
+                 <td className="px-3 py-2 font-sans">{row.master}</td>
+                 <td className="px-3 py-2 font-mono">{row.masterId}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.acceptTime}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.appointTime}</td>
+                 <td className="px-3 py-2 font-sans">{row.rejectReason}</td>
+                 <td className="px-3 py-2 font-mono">{row.grabTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.finishTime}</td>
+                 <td className="px-3 py-2 font-sans">{row.masterRemark}</td>
+                 <td className="px-3 py-2 font-sans">{row.returnReason}</td>
+                 <td className="px-3 py-2 font-mono">{row.returnTime}</td>
+                 <td className="px-3 py-2 text-blue-600 cursor-pointer whitespace-nowrap font-sans">详情 修改 解决</td>
                </tr>
              ))}
           </tbody>
         </table>
       </div>
-      <div className="mt-2 text-xs text-slate-500 px-2 flex justify-end">共 0 条</div>
+      <div className="mt-2 text-xs text-slate-500 px-2 flex justify-end font-sans">共 <span className="font-mono ml-1">0</span> 条</div>
     </div>
   );
 };
@@ -882,17 +882,17 @@ const ErrorOrderView = () => {
     <div className="flex flex-col h-full overflow-hidden">
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          <div className="flex gap-4 items-center flex-wrap">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">上报时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /> <span className="text-xs">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-mono" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">上报时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs font-mono" /> <span className="text-xs font-sans">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs font-mono" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','订单号','上报时间','手机号','来源','工作机','客户姓名','状态','录单员','师傅','派单员','上报人','报错类型','报错详情','处理详情','处理时间','解决方案','解决人','解决时间'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -901,25 +901,25 @@ const ErrorOrderView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.reportTime}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.source}</td>
-                 <td className="px-3 py-2">{row.workPhone}</td>
-                 <td className="px-3 py-2">{row.clientName}</td>
-                 <td className="px-3 py-2">{row.status}</td>
-                 <td className="px-3 py-2">{row.recorder}</td>
-                 <td className="px-3 py-2">{row.master}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2">{row.reporter}</td>
-                 <td className="px-3 py-2">{row.type}</td>
-                 <td className="px-3 py-2 max-w-[150px] truncate" title={row.detail}>{row.detail}</td>
-                 <td className="px-3 py-2 max-w-[150px] truncate" title={row.processDetail}>{row.processDetail}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.processTime}</td>
-                 <td className="px-3 py-2">{row.solution}</td>
-                 <td className="px-3 py-2">{row.solver}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.solveTime}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600 font-mono">{row.orderNo}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.reportTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.mobile}</td>
+                 <td className="px-3 py-2 font-sans">{row.source}</td>
+                 <td className="px-3 py-2 font-mono">{row.workPhone}</td>
+                 <td className="px-3 py-2 font-sans">{row.clientName}</td>
+                 <td className="px-3 py-2 font-sans text-center"><span className="bg-red-50 text-red-500 border border-red-200 px-1 rounded">{row.status}</span></td>
+                 <td className="px-3 py-2 font-sans">{row.recorder}</td>
+                 <td className="px-3 py-2 font-sans">{row.master}</td>
+                 <td className="px-3 py-2 font-sans">{row.dispatcher}</td>
+                 <td className="px-3 py-2 font-sans">{row.reporter}</td>
+                 <td className="px-3 py-2 font-sans">{row.type}</td>
+                 <td className="px-3 py-2 max-w-[150px] truncate font-sans" title={row.detail}>{row.detail}</td>
+                 <td className="px-3 py-2 max-w-[150px] truncate font-sans" title={row.processDetail}>{row.processDetail}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.processTime}</td>
+                 <td className="px-3 py-2 font-sans">{row.solution}</td>
+                 <td className="px-3 py-2 font-sans">{row.solver}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.solveTime}</td>
                </tr>
              ))}
           </tbody>
@@ -938,17 +938,17 @@ const DirectDispatchView = () => {
     <div className="flex flex-col h-full overflow-hidden">
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          <div className="flex gap-4 items-center flex-wrap">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">商家单号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-mono" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">商家单号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-mono" placeholder="请输入内容" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','订单号','商家','商家单号','状态','区域','地址','详情','来源','工作机','客户姓名','师傅','创建人','师傅ID','创建人ID','操作时间','取消原因','取消时间','录单时间','接单时间','总价','成本','利润','实付','订金','尾款','备注','完工收入','地图'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -957,35 +957,35 @@ const DirectDispatchView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2">{row.merchant}</td>
-                 <td className="px-3 py-2">{row.merchantOrderNo}</td>
-                 <td className="px-3 py-2">{row.status}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.region}>{row.region}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.address}>{row.address}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.detail}>{row.detail}</td>
-                 <td className="px-3 py-2">{row.source}</td>
-                 <td className="px-3 py-2">{row.workPhone}</td>
-                 <td className="px-3 py-2">{row.clientName}</td>
-                 <td className="px-3 py-2">{row.master}</td>
-                 <td className="px-3 py-2">{row.creator}</td>
-                 <td className="px-3 py-2">{row.masterId}</td>
-                 <td className="px-3 py-2">{row.creatorId}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.opTime}</td>
-                 <td className="px-3 py-2">{row.cancelReason}</td>
-                 <td className="px-3 py-2">{row.cancelTime}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.recordTime}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.receiveTime}</td>
-                 <td className="px-3 py-2">{row.total}</td>
-                 <td className="px-3 py-2">{row.cost}</td>
-                 <td className="px-3 py-2">{row.revenue}</td>
-                 <td className="px-3 py-2">{row.paid}</td>
-                 <td className="px-3 py-2">{row.deposit}</td>
-                 <td className="px-3 py-2">{row.rest}</td>
-                 <td className="px-3 py-2">{row.remark}</td>
-                 <td className="px-3 py-2">{row.finishIncome}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer">{row.map}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600 font-mono">{row.orderNo}</td>
+                 <td className="px-3 py-2 font-sans">{row.merchant}</td>
+                 <td className="px-3 py-2 font-mono">{row.merchantOrderNo}</td>
+                 <td className="px-3 py-2 font-sans">{row.status}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate font-sans" title={row.region}>{row.region}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate font-sans" title={row.address}>{row.address}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate font-sans" title={row.detail}>{row.detail}</td>
+                 <td className="px-3 py-2 font-sans">{row.source}</td>
+                 <td className="px-3 py-2 font-mono">{row.workPhone}</td>
+                 <td className="px-3 py-2 font-sans">{row.clientName}</td>
+                 <td className="px-3 py-2 font-sans">{row.master}</td>
+                 <td className="px-3 py-2 font-sans">{row.creator}</td>
+                 <td className="px-3 py-2 font-mono">{row.masterId}</td>
+                 <td className="px-3 py-2 font-mono">{row.creatorId}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.opTime}</td>
+                 <td className="px-3 py-2 font-sans">{row.cancelReason}</td>
+                 <td className="px-3 py-2 font-mono">{row.cancelTime}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.recordTime}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.receiveTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.total}</td>
+                 <td className="px-3 py-2 font-mono">{row.cost}</td>
+                 <td className="px-3 py-2 font-mono">{row.revenue}</td>
+                 <td className="px-3 py-2 font-mono">{row.paid}</td>
+                 <td className="px-3 py-2 font-mono">{row.deposit}</td>
+                 <td className="px-3 py-2 font-mono">{row.rest}</td>
+                 <td className="px-3 py-2 font-sans">{row.remark}</td>
+                 <td className="px-3 py-2 font-mono">{row.finishIncome}</td>
+                 <td className="px-3 py-2 text-blue-600 cursor-pointer font-sans">{row.map}</td>
                </tr>
              ))}
           </tbody>
@@ -1004,16 +1004,16 @@ const DispatchPerformanceView = () => {
     <div className="flex flex-col h-full overflow-hidden">
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          <div className="flex gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">派单员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">派单员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-sans" placeholder="请输入内容" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','派单员','总业绩','手动派单线下业绩','手动派单平台业绩','手动派单总业绩','自动派单线下业绩','自动派单平台业绩','自动派单总业绩'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -1022,15 +1022,15 @@ const DispatchPerformanceView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2 font-bold text-red-600">{row.total}</td>
-                 <td className="px-3 py-2">{row.manualOffline}</td>
-                 <td className="px-3 py-2">{row.manualPlatform}</td>
-                 <td className="px-3 py-2 font-medium">{row.manualTotal}</td>
-                 <td className="px-3 py-2">{row.autoOffline}</td>
-                 <td className="px-3 py-2">{row.autoPlatform}</td>
-                 <td className="px-3 py-2 font-medium">{row.autoTotal}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 font-sans">{row.dispatcher}</td>
+                 <td className="px-3 py-2 font-bold text-red-600 font-mono">{row.total}</td>
+                 <td className="px-3 py-2 font-mono">{row.manualOffline}</td>
+                 <td className="px-3 py-2 font-mono">{row.manualPlatform}</td>
+                 <td className="px-3 py-2 font-medium font-mono">{row.manualTotal}</td>
+                 <td className="px-3 py-2 font-mono">{row.autoOffline}</td>
+                 <td className="px-3 py-2 font-mono">{row.autoPlatform}</td>
+                 <td className="px-3 py-2 font-medium font-mono">{row.autoTotal}</td>
                </tr>
              ))}
           </tbody>
@@ -1049,16 +1049,16 @@ const ChangeRecordView = () => {
     <div className="flex flex-col h-full overflow-hidden">
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          <div className="flex gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-mono" placeholder="请输入内容" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','ID','订单号','修改时间','手机号','操作人'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -1067,12 +1067,12 @@ const ChangeRecordView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-center">{row.seq}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.updateTime}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.operator}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.seq}</td>
+                 <td className="px-3 py-2 text-blue-600 font-mono">{row.orderNo}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.updateTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.mobile}</td>
+                 <td className="px-3 py-2 font-sans">{row.operator}</td>
                </tr>
              ))}
           </tbody>
@@ -1091,17 +1091,17 @@ const LongTermOrderView = () => {
     <div className="flex flex-col h-full overflow-hidden">
        <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          <div className="flex gap-4 items-center flex-wrap">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">状态</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-mono" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">状态</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24 font-sans"><option>请选择</option></select></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','订单号','手机号','客户姓名','状态','师傅','录单员','派单员','创建时间','申请原因','证明材料'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -1110,17 +1110,17 @@ const LongTermOrderView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.clientName}</td>
-                 <td className="px-3 py-2">{row.status}</td>
-                 <td className="px-3 py-2">{row.master}</td>
-                 <td className="px-3 py-2">{row.recorder}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.createTime}</td>
-                 <td className="px-3 py-2">{row.reason}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer">{row.material}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600 font-mono">{row.orderNo}</td>
+                 <td className="px-3 py-2 font-mono">{row.mobile}</td>
+                 <td className="px-3 py-2 font-sans">{row.clientName}</td>
+                 <td className="px-3 py-2 font-sans">{row.status}</td>
+                 <td className="px-3 py-2 font-sans">{row.master}</td>
+                 <td className="px-3 py-2 font-sans">{row.recorder}</td>
+                 <td className="px-3 py-2 font-sans">{row.dispatcher}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.createTime}</td>
+                 <td className="px-3 py-2 font-sans">{row.reason}</td>
+                 <td className="px-3 py-2 text-blue-600 cursor-pointer font-sans">{row.material}</td>
                </tr>
              ))}
           </tbody>
@@ -1139,24 +1139,24 @@ const RecordingPriceView = () => {
     <div className="flex flex-col h-full overflow-hidden">
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={
         <div className="flex gap-2">
-           <button className="bg-blue-600 text-white px-3 py-1 text-xs rounded">新增</button>
-           <button className="bg-green-600 text-white px-3 py-1 text-xs rounded">上传excel</button>
-           <button className="bg-red-400 text-white px-3 py-1 text-xs rounded">批量删除</button>
-           <button className="bg-orange-400 text-white px-3 py-1 text-xs rounded">强制删除</button>
+           <button className="bg-blue-600 text-white px-3 py-1 text-xs rounded font-sans">新增</button>
+           <button className="bg-green-600 text-white px-3 py-1 text-xs rounded font-sans">上传excel</button>
+           <button className="bg-red-400 text-white px-3 py-1 text-xs rounded font-sans">批量删除</button>
+           <button className="bg-orange-400 text-white px-3 py-1 text-xs rounded font-sans">强制删除</button>
         </div>
       }>
          <div className="flex gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">项目</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-48" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">地域</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-48" placeholder="请输入内容" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">项目</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-48 font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">地域</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-48 font-sans" placeholder="请输入内容" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               <th className="px-3 py-2 w-8"><input type="checkbox" /></th>
               {['序号','价格','体系名称','项目','地域','备注','操作'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
@@ -1167,13 +1167,13 @@ const RecordingPriceView = () => {
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center"><input type="checkbox" /></td>
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.price}</td>
-                 <td className="px-3 py-2">{row.systemName}</td>
-                 <td className="px-3 py-2">{row.item}</td>
-                 <td className="px-3 py-2">{row.region}</td>
-                 <td className="px-3 py-2">{row.remark}</td>
-                 <td className="px-3 py-2">
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 font-mono">{row.price}</td>
+                 <td className="px-3 py-2 font-sans">{row.systemName}</td>
+                 <td className="px-3 py-2 font-sans">{row.item}</td>
+                 <td className="px-3 py-2 font-sans">{row.region}</td>
+                 <td className="px-3 py-2 font-sans">{row.remark}</td>
+                 <td className="px-3 py-2 font-sans">
                     <span className="text-blue-600 cursor-pointer mr-2">修改</span>
                     <span className="text-red-500 cursor-pointer">删除</span>
                  </td>
@@ -1183,12 +1183,12 @@ const RecordingPriceView = () => {
         </table>
       </div>
       <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2 items-center">
-         <span>共 13 条</span>
-         <select className="border text-xs"><option>10条/页</option></select>
-         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded">1</button>
-         <button className="border px-2 py-0.5 rounded">2</button>
-         <button className="border px-2 py-0.5 rounded">{'>'}</button>
-         <span>前往 <input className="w-8 border text-center"/> 页</span>
+         <span className="font-sans">共 <span className="font-mono">13</span> 条</span>
+         <select className="border text-xs font-mono"><option>10条/页</option></select>
+         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded font-sans">1</button>
+         <button className="border px-2 py-0.5 rounded font-mono">2</button>
+         <button className="border px-2 py-0.5 rounded font-sans">{'>'}</button>
+         <span className="font-sans">前往 <input className="w-8 border text-center font-mono"/> 页</span>
        </div>
     </div>
   );
@@ -1203,28 +1203,28 @@ const QuotationView = () => {
     <div className="flex flex-col h-full overflow-hidden">
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={
         <div className="flex gap-2">
-           <button className="bg-blue-600 text-white px-3 py-1 text-xs rounded">新增</button>
-           <button className="bg-green-600 text-white px-3 py-1 text-xs rounded">上传excel</button>
-           <button className="bg-red-400 text-white px-3 py-1 text-xs rounded">批量删除</button>
-           <button className="bg-orange-400 text-white px-3 py-1 text-xs rounded">强制删除</button>
-           <button className="bg-blue-400 text-white px-3 py-1 text-xs rounded">添加报价图片</button>
-           <button className="bg-blue-500 text-white px-3 py-1 text-xs rounded">导出</button>
+           <button className="bg-blue-600 text-white px-3 py-1 text-xs rounded font-sans">新增</button>
+           <button className="bg-green-600 text-white px-3 py-1 text-xs rounded font-sans">上传excel</button>
+           <button className="bg-red-400 text-white px-3 py-1 text-xs rounded font-sans">批量删除</button>
+           <button className="bg-orange-400 text-white px-3 py-1 text-xs rounded font-sans">强制删除</button>
+           <button className="bg-blue-400 text-white px-3 py-1 text-xs rounded font-sans">添加报价图片</button>
+           <button className="bg-blue-500 text-white px-3 py-1 text-xs rounded font-sans">导出</button>
         </div>
       }>
          <div className="flex gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">项目</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">地域</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">服务时间</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select><span className="text-xs">-</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">价格类型</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-32"><option>请选择</option></select></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">项目</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">地域</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">服务时间</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24 font-mono"><option>请选择</option></select><span className="text-xs">-</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24 font-mono"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">价格类型</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-sans"><option>请选择</option></select></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               <th className="px-3 py-2 w-8"><input type="checkbox" /></th>
               {['序号','城市','服务项目','服务时间','价格类型','公司对外报价','师傅结算底价','划线价/成单底价','建议师傅分成比例','报价内容','报价图片','备注','操作'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
@@ -1235,19 +1235,19 @@ const QuotationView = () => {
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
                  <td className="px-3 py-2 text-center"><input type="checkbox" /></td>
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.city}</td>
-                 <td className="px-3 py-2">{row.item}</td>
-                 <td className="px-3 py-2">{row.time}</td>
-                 <td className="px-3 py-2">{row.type}</td>
-                 <td className="px-3 py-2">{row.publicPrice}</td>
-                 <td className="px-3 py-2">{row.basePrice}</td>
-                 <td className="px-3 py-2">{row.linePrice}</td>
-                 <td className="px-3 py-2">{row.ratio}</td>
-                 <td className="px-3 py-2 max-w-[200px] truncate" title={row.content}>{row.content}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer">{row.pic}</td>
-                 <td className="px-3 py-2">{row.remark}</td>
-                 <td className="px-3 py-2">
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 font-sans">{row.city}</td>
+                 <td className="px-3 py-2 font-sans">{row.item}</td>
+                 <td className="px-3 py-2 font-mono">{row.time}</td>
+                 <td className="px-3 py-2 font-sans">{row.type}</td>
+                 <td className="px-3 py-2 font-mono">{row.publicPrice}</td>
+                 <td className="px-3 py-2 font-mono">{row.basePrice}</td>
+                 <td className="px-3 py-2 font-mono">{row.linePrice}</td>
+                 <td className="px-3 py-2 font-mono">{row.ratio}</td>
+                 <td className="px-3 py-2 max-w-[200px] truncate font-sans" title={row.content}>{row.content}</td>
+                 <td className="px-3 py-2 text-blue-600 cursor-pointer font-sans">{row.pic}</td>
+                 <td className="px-3 py-2 font-sans">{row.remark}</td>
+                 <td className="px-3 py-2 font-sans">
                     <span className="text-blue-600 cursor-pointer mr-2">修改</span>
                     <span className="text-blue-600 cursor-pointer mr-2">调价记录</span>
                     <span className="text-red-500 cursor-pointer">删除</span>
@@ -1258,15 +1258,15 @@ const QuotationView = () => {
         </table>
       </div>
       <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2 items-center">
-         <span>共 48 条</span>
-         <select className="border text-xs"><option>10条/页</option></select>
-         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded">1</button>
-         <button className="border px-2 py-0.5 rounded">2</button>
-         <button className="border px-2 py-0.5 rounded">3</button>
-         <button className="border px-2 py-0.5 rounded">4</button>
-         <button className="border px-2 py-0.5 rounded">5</button>
-         <button className="border px-2 py-0.5 rounded">{'>'}</button>
-         <span>前往 <input className="w-8 border text-center"/> 页</span>
+         <span className="font-sans">共 <span className="font-mono">48</span> 条</span>
+         <select className="border text-xs font-mono"><option>10条/页</option></select>
+         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded font-sans">1</button>
+         <button className="border px-2 py-0.5 rounded font-mono">2</button>
+         <button className="border px-2 py-0.5 rounded font-mono">3</button>
+         <button className="border px-2 py-0.5 rounded font-mono">4</button>
+         <button className="border px-2 py-0.5 rounded font-mono">5</button>
+         <button className="border px-2 py-0.5 rounded font-sans">{'>'}</button>
+         <span className="font-sans">前往 <input className="w-8 border text-center font-mono"/> 页</span>
        </div>
     </div>
   );
@@ -1284,18 +1284,18 @@ const PendingEntryView = () => {
       </div>
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          <div className="grid grid-cols-7 gap-3">
-             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap">订单号/手机号/客户名称</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">订单来源</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">地域</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">服务项目</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">状态</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">地址</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">工作机</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap">创建时间</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /><span className="text-xs">-</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="col-span-2 flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">是否刷单</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">订单号/手机号/客户名称</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">订单来源</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">地域</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">服务项目</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">状态</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">地址</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">工作机</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">创建时间</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" /><span className="text-xs font-sans">-</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" /></div>
+             <div className="col-span-2 flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">是否刷单</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans"><option>请选择</option></select></div>
              <div className="col-span-1 flex gap-2">
-                <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs w-full">搜索</button>
-                <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs w-full">重置</button>
+                <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs w-full font-sans">搜索</button>
+                <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs w-full font-sans">重置</button>
              </div>
          </div>
       </FilterContainer>
@@ -1303,7 +1303,7 @@ const PendingEntryView = () => {
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','订单号','创建时间','手机号码','项目','状态','地域','地址','详细描述','订单来源','工作机','客户名称','客户备注','是否刷单','取消原因','取消详情','操作'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -1312,34 +1312,34 @@ const PendingEntryView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.createTime}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2">{row.item}</td>
-                 <td className="px-3 py-2">{row.status}</td>
-                 <td className="px-3 py-2">{row.region}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.address}>{row.address}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.detail}>{row.detail}</td>
-                 <td className="px-3 py-2">{row.source}</td>
-                 <td className="px-3 py-2">{row.workPhone}</td>
-                 <td className="px-3 py-2">{row.clientName}</td>
-                 <td className="px-3 py-2">{row.clientRemark}</td>
-                 <td className="px-3 py-2">{row.isFake}</td>
-                 <td className="px-3 py-2">{row.cancelReason}</td>
-                 <td className="px-3 py-2">{row.cancelDetail}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer">操作</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600 font-mono">{row.orderNo}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.createTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.mobile}</td>
+                 <td className="px-3 py-2 font-sans">{row.item}</td>
+                 <td className="px-3 py-2 font-sans">{row.status}</td>
+                 <td className="px-3 py-2 font-sans">{row.region}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate font-sans" title={row.address}>{row.address}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate font-sans" title={row.detail}>{row.detail}</td>
+                 <td className="px-3 py-2 font-sans">{row.source}</td>
+                 <td className="px-3 py-2 font-mono">{row.workPhone}</td>
+                 <td className="px-3 py-2 font-sans">{row.clientName}</td>
+                 <td className="px-3 py-2 font-sans">{row.clientRemark}</td>
+                 <td className="px-3 py-2 font-sans">{row.isFake}</td>
+                 <td className="px-3 py-2 font-sans">{row.cancelReason}</td>
+                 <td className="px-3 py-2 font-sans">{row.cancelDetail}</td>
+                 <td className="px-3 py-2 text-blue-600 cursor-pointer font-sans">操作</td>
                </tr>
              ))}
           </tbody>
         </table>
       </div>
       <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2 items-center">
-         <span>共 0 条</span>
-         <select className="border text-xs"><option>10条/页</option></select>
-         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded">1</button>
-         <button className="border px-2 py-0.5 rounded">{'>'}</button>
-         <span>前往 <input className="w-8 border text-center"/> 页</span>
+         <span className="font-sans">共 <span className="font-mono">0</span> 条</span>
+         <select className="border text-xs font-mono"><option>10条/页</option></select>
+         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded font-sans">1</button>
+         <button className="border px-2 py-0.5 rounded font-sans">{'>'}</button>
+         <span className="font-sans">前往 <input className="w-8 border text-center font-mono"/> 页</span>
        </div>
     </div>
   );
@@ -1357,17 +1357,17 @@ const OrderLibraryView = () => {
       </div>
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          <div className="grid grid-cols-7 gap-3">
-             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap">订单号/手机号</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">分机号</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">创建人</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">录单人</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">地域</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">地址</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap">来源</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap">报名时间</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /><span className="text-xs">-</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs" /></div>
+             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">订单号/手机号</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">分机号</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">创建人</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">录单人</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">地域</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">地址</span><input className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">来源</span><select className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-sans"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2 col-span-2"><span className="text-xs text-slate-500 whitespace-nowrap font-sans">报名时间</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" /><span className="text-xs font-sans">-</span><input type="date" className="h-7 w-full border border-blue-200 rounded px-2 text-xs font-mono" /></div>
              <div className="col-span-1 flex gap-2">
-                <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs w-full">搜索</button>
-                <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs w-full">重置</button>
+                <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs w-full font-sans">搜索</button>
+                <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs w-full font-sans">重置</button>
              </div>
          </div>
       </FilterContainer>
@@ -1375,7 +1375,7 @@ const OrderLibraryView = () => {
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','是否有效','是否可视','是否派打','录单时间','报名时间','状态','地域','详细地址','详情','来源','工作机','录单员','派单员','师傅','师傅id','作废时间','作废原因','撤销原因','撤销时间','派单时间','总收款','成本','业绩','实付金额','垫付金额','备注','完工收入','客服备注','操作'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -1384,48 +1384,48 @@ const OrderLibraryView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.isValid}</td>
-                 <td className="px-3 py-2">{row.isVisible}</td>
-                 <td className="px-3 py-2">{row.isCalled}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.recordTime}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.signupTime}</td>
-                 <td className="px-3 py-2">{row.status}</td>
-                 <td className="px-3 py-2">{row.region}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.address}>{row.address}</td>
-                 <td className="px-3 py-2 max-w-[100px] truncate" title={row.detail}>{row.detail}</td>
-                 <td className="px-3 py-2">{row.source}</td>
-                 <td className="px-3 py-2">{row.workPhone}</td>
-                 <td className="px-3 py-2">{row.recorder}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2">{row.master}</td>
-                 <td className="px-3 py-2">{row.masterId}</td>
-                 <td className="px-3 py-2">{row.voidTime}</td>
-                 <td className="px-3 py-2">{row.voidReason}</td>
-                 <td className="px-3 py-2">{row.revokeReason}</td>
-                 <td className="px-3 py-2">{row.revokeTime}</td>
-                 <td className="px-3 py-2 whitespace-nowrap">{row.dispatchTime}</td>
-                 <td className="px-3 py-2">{row.total}</td>
-                 <td className="px-3 py-2">{row.cost}</td>
-                 <td className="px-3 py-2">{row.revenue}</td>
-                 <td className="px-3 py-2">{row.paid}</td>
-                 <td className="px-3 py-2">{row.deposit}</td>
-                 <td className="px-3 py-2">{row.remark}</td>
-                 <td className="px-3 py-2">{row.finishIncome}</td>
-                 <td className="px-3 py-2">{row.csRemark}</td>
-                 <td className="px-3 py-2 text-blue-600 cursor-pointer">详情</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 font-sans">{row.isValid}</td>
+                 <td className="px-3 py-2 font-sans">{row.isVisible}</td>
+                 <td className="px-3 py-2 font-sans">{row.isCalled}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.recordTime}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.signupTime}</td>
+                 <td className="px-3 py-2 font-sans">{row.status}</td>
+                 <td className="px-3 py-2 font-sans">{row.region}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate font-sans" title={row.address}>{row.address}</td>
+                 <td className="px-3 py-2 max-w-[100px] truncate font-sans" title={row.detail}>{row.detail}</td>
+                 <td className="px-3 py-2 font-sans">{row.source}</td>
+                 <td className="px-3 py-2 font-mono">{row.workPhone}</td>
+                 <td className="px-3 py-2 font-sans">{row.recorder}</td>
+                 <td className="px-3 py-2 font-sans">{row.dispatcher}</td>
+                 <td className="px-3 py-2 font-sans">{row.master}</td>
+                 <td className="px-3 py-2 font-mono">{row.masterId}</td>
+                 <td className="px-3 py-2 font-mono">{row.voidTime}</td>
+                 <td className="px-3 py-2 font-sans">{row.voidReason}</td>
+                 <td className="px-3 py-2 font-sans">{row.revokeReason}</td>
+                 <td className="px-3 py-2 font-mono">{row.revokeTime}</td>
+                 <td className="px-3 py-2 whitespace-nowrap font-mono">{row.dispatchTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.total}</td>
+                 <td className="px-3 py-2 font-mono">{row.cost}</td>
+                 <td className="px-3 py-2 font-mono">{row.revenue}</td>
+                 <td className="px-3 py-2 font-mono">{row.paid}</td>
+                 <td className="px-3 py-2 font-mono">{row.deposit}</td>
+                 <td className="px-3 py-2 font-sans">{row.remark}</td>
+                 <td className="px-3 py-2 font-mono">{row.finishIncome}</td>
+                 <td className="px-3 py-2 font-sans">{row.csRemark}</td>
+                 <td className="px-3 py-2 text-blue-600 cursor-pointer font-sans">详情</td>
                </tr>
              ))}
           </tbody>
         </table>
       </div>
       <div className="mt-2 text-xs text-slate-500 px-2 flex justify-center gap-2 items-center">
-         <span>共 0 条</span>
-         <select className="border text-xs"><option>10条/页</option></select>
-         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded">1</button>
-         <button className="border px-2 py-0.5 rounded">2</button>
-         <button className="border px-2 py-0.5 rounded">{'>'}</button>
-         <span>前往 <input className="w-8 border text-center"/> 页</span>
+         <span className="font-sans">共 <span className="font-mono">0</span> 条</span>
+         <select className="border text-xs font-mono"><option>10条/页</option></select>
+         <button className="border px-2 py-0.5 bg-blue-500 text-white rounded font-sans">1</button>
+         <button className="border px-2 py-0.5 rounded font-mono">2</button>
+         <button className="border px-2 py-0.5 rounded font-sans">{'>'}</button>
+         <span className="font-sans">前往 <input className="w-8 border text-center font-mono"/> 页</span>
        </div>
     </div>
   );
@@ -1441,18 +1441,18 @@ const WeChatCollectionView = () => {
       <div className="mb-2">
          <DataOverview items={[{ label: '微信总收款', value: '¥ 12300.00' }, { label: '线下总收款', value: '¥ 5000.00' }]} />
       </div>
-      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={<button className="bg-green-600 text-white px-3 py-1 text-xs rounded">微信对账</button>}>
+      <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} extraButtons={<button className="bg-green-600 text-white px-3 py-1 text-xs rounded font-sans">微信对账</button>}>
          <div className="flex gap-4 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">创建时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /> <span className="text-xs">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">创建时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs font-mono" /> <span className="text-xs font-sans">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs font-mono" /></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
 
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','派单员','微信总收款','线下派单线下总收款','其它收款'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -1461,11 +1461,11 @@ const WeChatCollectionView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2 font-bold text-orange-600">{row.wechatTotal}</td>
-                 <td className="px-3 py-2">{row.offlineTotal}</td>
-                 <td className="px-3 py-2">{row.otherTotal}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 font-sans">{row.dispatcher}</td>
+                 <td className="px-3 py-2 font-bold text-orange-600 font-mono">{row.wechatTotal}</td>
+                 <td className="px-3 py-2 font-mono">{row.offlineTotal}</td>
+                 <td className="px-3 py-2 font-mono">{row.otherTotal}</td>
                </tr>
              ))}
           </tbody>
@@ -1484,23 +1484,23 @@ const OrderPaymentView = () => {
     <div className="flex flex-col h-full overflow-hidden">
       <FilterContainer isSearchOpen={isSearchOpen} onToggleSearch={() => setIsSearchOpen(!isSearchOpen)}>
          <div className="flex flex-wrap gap-3 items-center">
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">派单员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-24" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">核销券</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-24" placeholder="请输入内容" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">收款记录时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /> <span className="text-xs">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">收款方式</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">派单类型</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">验券时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /> <span className="text-xs">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs" /></div>
-             <div className="flex items-center gap-2"><span className="text-xs text-slate-500">验券状态</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24"><option>请选择</option></select></div>
-             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs ml-auto">搜索</button>
-             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs">重置</button>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">订单号/手机号</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-32 font-mono" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">派单员</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-24 font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">核销券</span><input className="h-7 border border-blue-200 rounded px-2 text-xs w-24 font-sans" placeholder="请输入内容" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">收款记录时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs font-mono" /> <span className="text-xs font-sans">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs font-mono" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">收款方式</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24 font-sans"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">派单类型</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24 font-sans"><option>请选择</option></select></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">验券时间</span><input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs font-mono" /> <span className="text-xs font-sans">-</span> <input type="date" className="h-7 border border-blue-200 rounded px-2 text-xs font-mono" /></div>
+             <div className="flex items-center gap-2"><span className="text-xs text-slate-500 font-sans">验券状态</span><select className="h-7 border border-blue-200 rounded px-2 text-xs w-24 font-sans"><option>请选择</option></select></div>
+             <button className="h-7 px-4 bg-blue-600 text-white rounded text-xs ml-auto font-sans">搜索</button>
+             <button className="h-7 px-4 bg-white border border-slate-300 text-slate-600 rounded text-xs font-sans">重置</button>
          </div>
       </FilterContainer>
       
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead className="bg-slate-50 sticky top-0 z-10 border-b">
-            <tr>
+            <tr className="font-sans">
               {['序号','订单号','派单员','完成时间','收款记录时间','手机号','收款金额','收款方式','核销券','验券状态','门店名称','验券金额','验券时间','验券失败原因','备注','创建人'].map(h => (
                 <th key={h} className="px-3 py-2 font-medium text-slate-700 whitespace-nowrap">{h}</th>
               ))}
@@ -1509,28 +1509,28 @@ const OrderPaymentView = () => {
           <tbody className="divide-y divide-slate-300">
              {data.map((row, i) => (
                <tr key={row.id} className="hover:bg-blue-100 even:bg-blue-50 transition-colors">
-                 <td className="px-3 py-2 text-center">{row.id}</td>
-                 <td className="px-3 py-2 text-blue-600">{row.orderNo}</td>
-                 <td className="px-3 py-2">{row.dispatcher}</td>
-                 <td className="px-3 py-2">{row.finishTime}</td>
-                 <td className="px-3 py-2">{row.payRecordTime}</td>
-                 <td className="px-3 py-2">{row.mobile}</td>
-                 <td className="px-3 py-2 font-bold text-orange-600">¥{row.amount}</td>
-                 <td className="px-3 py-2">{row.method}</td>
-                 <td className="px-3 py-2 text-center">{row.coupon}</td>
-                 <td className="px-3 py-2 text-center">{row.verifyStatus === '已核销' ? <span className="text-green-600">已核销</span> : <span className="text-gray-400">未核销</span>}</td>
-                 <td className="px-3 py-2">{row.storeName}</td>
-                 <td className="px-3 py-2">{row.verifyAmount}</td>
-                 <td className="px-3 py-2">{row.verifyTime}</td>
-                 <td className="px-3 py-2 text-center">{row.failReason}</td>
-                 <td className="px-3 py-2">{row.remark}</td>
-                 <td className="px-3 py-2">{row.creator}</td>
+                 <td className="px-3 py-2 text-center font-mono">{row.id}</td>
+                 <td className="px-3 py-2 text-blue-600 font-mono">{row.orderNo}</td>
+                 <td className="px-3 py-2 font-sans">{row.dispatcher}</td>
+                 <td className="px-3 py-2 font-mono">{row.finishTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.payRecordTime}</td>
+                 <td className="px-3 py-2 font-mono">{row.mobile}</td>
+                 <td className="px-3 py-2 font-bold text-orange-600 font-mono">¥{row.amount}</td>
+                 <td className="px-3 py-2 font-sans">{row.method}</td>
+                 <td className="px-3 py-2 text-center font-sans">{row.coupon}</td>
+                 <td className="px-3 py-2 text-center font-sans">{row.verifyStatus === '已核销' ? <span className="text-green-600">已核销</span> : <span className="text-gray-400">未核销</span>}</td>
+                 <td className="px-3 py-2 font-sans">{row.storeName}</td>
+                 <td className="px-3 py-2 font-mono">{row.verifyAmount}</td>
+                 <td className="px-3 py-2 font-mono">{row.verifyTime}</td>
+                 <td className="px-3 py-2 text-center font-sans">{row.failReason}</td>
+                 <td className="px-3 py-2 font-sans">{row.remark}</td>
+                 <td className="px-3 py-2 font-sans">{row.creator}</td>
                </tr>
              ))}
           </tbody>
         </table>
       </div>
-       <div className="mt-2 text-xs font-bold text-slate-700 px-2">收款合计: ¥ 2450.00 &nbsp;&nbsp; 订单总数 (已去重): 20</div>
+       <div className="mt-2 text-xs font-bold text-slate-700 px-2 font-sans">收款合计: <span className="font-mono">¥ 2450.00</span> &nbsp;&nbsp; 订单总数 (已去重): <span className="font-mono">20</span></div>
     </div>
   );
 };
@@ -1597,7 +1597,7 @@ const App = () => {
                 <table className="w-full text-left border-collapse relative">
                   <thead className="sticky top-0 z-40 shadow-sm">
                     {/* ... header rows ... */}
-                    <tr className="bg-slate-50 border-b-2 border-gray-300 text-base font-bold uppercase text-slate-700 tracking-wider">
+                    <tr className="bg-slate-50 border-b-2 border-gray-300 text-base font-bold uppercase text-slate-700 tracking-wider font-sans">
                       <th className="px-2 py-2 whitespace-nowrap w-[110px] bg-slate-50 text-center sticky top-0 z-30">手机号</th>
                       <th className="px-2 py-2 w-[140px] whitespace-nowrap bg-slate-50 sticky top-0 z-30">项目/质保期</th>
                       <th className="px-2 py-2 whitespace-nowrap w-[90px] bg-slate-50 text-center sticky top-0 z-30">状态</th>
@@ -1659,7 +1659,7 @@ const App = () => {
                       <tr key={order.id} onMouseLeave={handleMouseEnterOther} className="bg-white even:bg-blue-50 hover:!bg-blue-100 transition-colors group border-b border-slate-300 last:border-0 align-middle">
                         
                         {/* ... table cells ... */}
-                        <td className="px-2 py-2 text-slate-800 font-bold text-[12px] tabular-nums whitespace-nowrap align-middle text-center" onMouseEnter={handleMouseEnterOther}>{order.mobile}</td>
+                        <td className="px-2 py-2 text-slate-800 font-bold text-[12px] tabular-nums whitespace-nowrap align-middle text-center font-mono" onMouseEnter={handleMouseEnterOther}>{order.mobile}</td>
                         
                         <td className="px-2 py-2 align-middle whitespace-nowrap" onMouseEnter={handleMouseEnterOther}>
                           <ServiceItemCell item={order.serviceItem} warranty={order.warrantyPeriod} />
@@ -1670,13 +1670,13 @@ const App = () => {
                         </td>
 
                         <td className="px-2 py-2 text-center align-middle" onMouseEnter={handleMouseEnterOther}>
-                            <span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-bold text-[13px]">{order.weightedCoefficient.toFixed(1)}</span>
+                            <span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-bold text-[13px] font-mono">{order.weightedCoefficient.toFixed(1)}</span>
                         </td>
 
-                        <td className="px-2 py-2 text-slate-700 whitespace-nowrap align-middle text-center text-[12px]" onMouseEnter={handleMouseEnterOther}>
+                        <td className="px-2 py-2 text-slate-700 whitespace-nowrap align-middle text-center text-[12px] font-sans" onMouseEnter={handleMouseEnterOther}>
                             <div className="relative pr-8 inline-block"> 
                                 {order.region}
-                                <span className="absolute bottom-0 right-0 text-[9px] text-blue-600 border border-blue-200 bg-blue-50 px-1 rounded">
+                                <span className="absolute bottom-0 right-0 text-[9px] text-blue-600 border border-blue-200 bg-blue-50 px-1 rounded font-mono">
                                   {order.regionPeople}人
                                 </span>
                             </div>
@@ -1690,23 +1690,23 @@ const App = () => {
                           <TooltipCell content={order.details} maxWidthClass="max-w-[140px]" showTooltip={hoveredTooltipCell?.rowId === order.id && hoveredTooltipCell?.colKey === 'details'} />
                         </td>
                         
-                        <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[14px]" onMouseEnter={handleMouseEnterOther}>
+                        <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[14px] font-mono" onMouseEnter={handleMouseEnterOther}>
                            {order.serviceRatio}
                         </td>
                         
                         <td className="px-2 py-2 text-center align-middle" onMouseEnter={handleMouseEnterOther}>
-                           <span className="px-2 py-0.5 rounded border border-gray-200 bg-gray-50 text-[11px] text-gray-600 whitespace-nowrap">{order.suggestedMethod}</span>
+                           <span className="px-2 py-0.5 rounded border border-gray-200 bg-gray-50 text-[11px] text-gray-600 whitespace-nowrap font-sans">{order.suggestedMethod}</span>
                         </td>
 
-                        <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[13px]" onMouseEnter={handleMouseEnterOther}>
+                        <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[13px] font-mono" onMouseEnter={handleMouseEnterOther}>
                            {formatCurrency(order.guidePrice)}
                         </td>
 
-                        <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[13px]" onMouseEnter={handleMouseEnterOther}>
+                        <td className="px-2 py-2 text-center align-middle font-medium text-slate-600 text-[13px] font-mono" onMouseEnter={handleMouseEnterOther}>
                            {order.historicalPrice}
                         </td>
 
-                        <td className="px-2 py-2 align-middle text-center" onMouseEnter={handleMouseEnterOther}><span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[11px] border border-slate-200 whitespace-nowrap font-medium">{order.source}</span></td>
+                        <td className="px-2 py-2 align-middle text-center" onMouseEnter={handleMouseEnterOther}><span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[11px] border border-slate-200 whitespace-nowrap font-medium font-sans">{order.source}</span></td>
                         
                         <td className="px-2 py-2 align-middle" onMouseEnter={handleMouseEnterOther}>
                             <CombinedIdCell orderNo={order.orderNo} workOrderNo={order.workOrderNo} hasAdvancePayment={order.hasAdvancePayment} depositAmount={order.depositAmount} />
@@ -1720,27 +1720,27 @@ const App = () => {
                             <button className="text-blue-600 hover:bg-blue-50 p-1 rounded transition-colors"><Search size={14} /></button>
                         </td>
 
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap">{order.hasCoupon ? <Check size={14} className="text-green-500 mx-auto"/> : <span className="text-gray-300">-</span>}</td>
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap">{order.isCouponVerified ? <span className="text-green-600 font-bold text-[13px]">是</span> : <span className="text-gray-400 text-[13px]">否</span>}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-sans">{order.hasCoupon ? <Check size={14} className="text-green-500 mx-auto"/> : <span className="text-gray-300">-</span>}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-sans">{order.isCouponVerified ? <span className="text-green-600 font-bold text-[13px]">是</span> : <span className="text-gray-400 text-[13px]">否</span>}</td>
                         
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap">
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-sans">
                             {order.isRead ? <span className="text-gray-400 text-[12px]">已读</span> : <span className="text-orange-500 text-[12px]">未读</span>}
                         </td>
                         
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap">
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-sans">
                             {order.isCalled ? <span className="text-gray-400 text-[12px]">已拨打</span> : <span className="text-orange-500 text-[12px]">未拨打</span>}
                         </td>
                         
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px]">{order.warrantyPeriod}</td>
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px]">{order.workPhone}</td>
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-700 font-medium text-[13px]">{order.customerName}</td>
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px]">{order.dispatcherName}</td>
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px]">{order.recorderName}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px] font-sans">{order.warrantyPeriod}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px] font-mono">{order.workPhone}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-700 font-medium text-[13px] font-sans">{order.customerName}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px] font-sans">{order.dispatcherName}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-600 text-[13px] font-sans">{order.recorderName}</td>
                         
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap">
                             <div className="flex flex-col items-center">
-                                <span className="text-slate-700 font-medium text-[13px]">{order.masterName}</span>
-                                <span className="text-slate-400 text-[11px]">{order.masterPhone}</span>
+                                <span className="text-slate-700 font-medium text-[13px] font-sans">{order.masterName}</span>
+                                <span className="text-slate-400 text-[11px] font-mono">{order.masterPhone}</span>
                             </div>
                         </td>
                         
@@ -1752,23 +1752,23 @@ const App = () => {
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-mono text-slate-700 text-[13px]">{formatCurrency(order.otherReceipt)}</td>
                         <td className="px-2 py-2 align-middle text-center whitespace-nowrap font-mono text-slate-700 text-[13px]">{formatCurrency(order.completionIncome)}</td>
                         
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500">{order.serviceTime || '-'}</td>
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500">{order.completionTime || '-'}</td>
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500">{order.paymentTime || '-'}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500 font-mono">{order.serviceTime || '-'}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500 font-mono">{order.completionTime || '-'}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-[12px] text-slate-500 font-mono">{order.paymentTime || '-'}</td>
                         
-                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-500 text-[12px]">{order.voiderNameAndReason || '-'}</td>
+                        <td className="px-2 py-2 align-middle text-center whitespace-nowrap text-slate-500 text-[12px] font-sans">{order.voiderNameAndReason || '-'}</td>
                         <td className="px-2 py-2 align-middle whitespace-nowrap"><TooltipCell content={order.voidDetails || '-'} maxWidthClass="max-w-[150px]" showTooltip={false} /></td>
                         <td className="px-2 py-2 align-middle whitespace-nowrap"><TooltipCell content={order.cancelReasonAndDetails || '-'} maxWidthClass="max-w-[150px]" showTooltip={false} /></td>
-                        <td className="px-2 py-2 align-middle whitespace-nowrap text-slate-500 text-[12px]">{order.favoriteRemark || '-'}</td>
+                        <td className="px-2 py-2 align-middle whitespace-nowrap text-slate-500 text-[12px] font-sans">{order.favoriteRemark || '-'}</td>
 
 
                         {/* --- 固定列 (联系人, 催单, 操作) --- */}
                         <td className="px-2 py-2 align-middle text-center sticky-col sticky-right-contact sticky-bg-solid" onMouseEnter={handleMouseEnterOther}>
                           <div className="grid grid-cols-2 gap-2 p-1 w-full">
-                            <button onClick={() => handleOpenChat('派单员', order)} className="text-[11px] w-full py-1 px-1 rounded border border-slate-300 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap font-medium shadow-sm">派单员</button>
-                            <button onClick={() => handleOpenChat('运营', order)} className="text-[11px] w-full py-1 px-1 rounded border border-slate-300 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap font-medium shadow-sm">运营</button>
-                            <button onClick={() => handleOpenChat('售后', order)} className="text-[11px] w-full py-1 px-1 rounded border border-slate-300 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap font-medium shadow-sm">售后</button>
-                            <button onClick={() => handleOpenChat('群聊', order)} className="text-[11px] w-full py-1 px-1 rounded border border-slate-300 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap font-medium shadow-sm">群聊</button>
+                            <button onClick={() => handleOpenChat('派单员', order)} className="text-[11px] w-full py-1 px-1 rounded border border-slate-300 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap font-medium shadow-sm font-sans">派单员</button>
+                            <button onClick={() => handleOpenChat('运营', order)} className="text-[11px] w-full py-1 px-1 rounded border border-slate-300 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap font-medium shadow-sm font-sans">运营</button>
+                            <button onClick={() => handleOpenChat('售后', order)} className="text-[11px] w-full py-1 px-1 rounded border border-slate-300 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap font-medium shadow-sm font-sans">售后</button>
+                            <button onClick={() => handleOpenChat('群聊', order)} className="text-[11px] w-full py-1 px-1 rounded border border-slate-300 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap font-medium shadow-sm font-sans">群聊</button>
                           </div>
                         </td>
                         <td className="px-2 py-2 align-middle text-center sticky-col sticky-right-remind sticky-bg-solid border-l border-gray-200" onMouseEnter={handleMouseEnterOther}><ReminderCell order={order} onRemind={handleRemindOrder} /></td>
