@@ -446,34 +446,97 @@ const DataOverview = ({ items }: { items: { label: string; value: string | numbe
   </div>
 );
 
-const Pagination = ({ total, current, pageSize, onPageChange, onSizeChange }: any) => (
-  <div className="flex items-center gap-2 text-xs text-slate-500">
-    <span className="font-source-han">共 <span className="font-mono">{total}</span> 条</span>
-    <select 
-      value={pageSize} 
-      onChange={e => onSizeChange(Number(e.target.value))}
-      className="border rounded px-1 py-0.5 font-mono"
-    >
-      {[10, 20, 50, 100].map(size => <option key={size} value={size}>{size}条/页</option>)}
-    </select>
-    <div className="flex gap-1">
+const Pagination = ({ total, current, pageSize, onPageChange, onSizeChange }: any) => {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const [inputVal, setInputVal] = useState('');
+
+  const handleJump = () => {
+      if (!inputVal) return;
+      const p = parseInt(inputVal);
+      if (!isNaN(p)) {
+          let target = p;
+          if (target < 1) target = 1;
+          if (target > totalPages) target = totalPages;
+          onPageChange(target);
+          setInputVal('');
+      }
+  };
+
+  // Logic to show pages (sliding window of 7)
+  const maxVisible = 7;
+  let startPage = Math.max(1, current - Math.floor(maxVisible / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+  
+  if (endPage - startPage + 1 < maxVisible) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+  }
+
+  const pages = [];
+  for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+  }
+
+  return (
+    <div className="flex items-center gap-2 text-xs text-slate-500 font-source-han select-none">
+      <span>共 <span className="font-bold">{total}</span> 条</span>
+      
+      <select 
+        value={pageSize} 
+        onChange={e => onSizeChange(Number(e.target.value))}
+        className="border border-slate-300 rounded px-2 py-1 mx-2 outline-none hover:border-blue-400 cursor-pointer bg-white"
+      >
+        {[10, 20, 50, 100].map(size => <option key={size} value={size}>{size}条/页</option>)}
+      </select>
+
       <button 
         onClick={() => onPageChange(Math.max(1, current - 1))}
         disabled={current === 1}
-        className="px-2 py-0.5 border rounded disabled:opacity-50 font-source-han"
+        className="p-1 hover:text-blue-600 disabled:text-slate-300 disabled:cursor-not-allowed transition-colors"
       >
-        Prev
+        <ChevronLeft size={16} />
       </button>
-      <span className="px-2 py-0.5 font-mono">{current}</span>
+
+      <div className="flex items-center">
+          {pages.map(p => (
+              <button
+                key={p}
+                onClick={() => onPageChange(p)}
+                className={`w-7 h-7 flex items-center justify-center rounded text-xs transition-colors mx-0.5 ${
+                    current === p 
+                    ? 'text-blue-600 font-bold' 
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                  {p}
+              </button>
+          ))}
+      </div>
+
       <button 
-        onClick={() => onPageChange(current + 1)} 
-        className="px-2 py-0.5 border rounded font-source-han"
+        onClick={() => onPageChange(Math.min(totalPages, current + 1))}
+        disabled={current === totalPages}
+        className="p-1 hover:text-blue-600 disabled:text-slate-300 disabled:cursor-not-allowed transition-colors"
       >
-        Next
+        <ChevronRight size={16} />
       </button>
+
+      <div className="flex items-center gap-2 ml-2">
+          <span>前往</span>
+          <input 
+            className="w-10 h-7 border border-slate-300 rounded text-center outline-none focus:border-blue-500 text-xs"
+            placeholder={String(current)}
+            value={inputVal}
+            onChange={(e) => setInputVal(e.target.value)}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') handleJump();
+            }}
+            onBlur={handleJump}
+          />
+          <span>页</span>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const NotificationBar = () => (
   <div className="bg-white px-4 py-2.5 rounded-lg mb-3 flex items-center justify-between text-xs shadow-sm border border-slate-200 font-source-han">
@@ -1408,7 +1471,6 @@ const OrderLibraryView = () => {
          <span className="font-source-han">共 <span className="font-mono">0</span> 条</span>
          <select className="border text-xs font-mono"><option>10条/页</option></select>
          <button className="border px-2 py-0.5 bg-blue-500 text-white rounded font-source-han">1</button>
-         <button className="border px-2 py-0.5 rounded font-mono">2</button>
          <button className="border px-2 py-0.5 rounded font-source-han">{'>'}</button>
          <span className="font-source-han">前往 <input className="w-8 border text-center font-mono"/> 页</span>
        </div>
