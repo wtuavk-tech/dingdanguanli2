@@ -1471,6 +1471,7 @@ const OrderLibraryView = () => {
          <span className="font-source-han">共 <span className="font-mono">0</span> 条</span>
          <select className="border text-xs font-mono"><option>10条/页</option></select>
          <button className="border px-2 py-0.5 bg-blue-500 text-white rounded font-source-han">1</button>
+         <button className="border px-2 py-0.5 rounded font-mono">2</button>
          <button className="border px-2 py-0.5 rounded font-source-han">{'>'}</button>
          <span className="font-source-han">前往 <input className="w-8 border text-center font-mono"/> 页</span>
        </div>
@@ -1811,18 +1812,18 @@ const App = () => {
 
                         {/* --- 固定列 (联系人, 催单, 操作) --- */}
                         <td className="px-2 py-2 align-middle text-center sticky-col sticky-right-contact sticky-bg-solid" onMouseEnter={handleMouseEnterOther}>
-                          <div className="flex justify-center items-center gap-3 w-full px-1">
-                            <button onClick={() => handleOpenChat('派单员', order)} className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-sm hover:scale-105" title="派单员">
-                                <Headset size={16} strokeWidth={2} />
+                          <div className="grid grid-cols-2 gap-2 justify-items-center w-fit mx-auto">
+                            <button onClick={() => handleOpenChat('派单员', order)} className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-sm hover:scale-105" title="派单员">
+                                <Headset size={12} strokeWidth={2} />
                             </button>
-                            <button onClick={() => handleOpenChat('运营', order)} className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white hover:bg-orange-600 transition-all shadow-sm hover:scale-105" title="运营">
-                                <User size={16} strokeWidth={2} />
+                            <button onClick={() => handleOpenChat('运营', order)} className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white hover:bg-orange-600 transition-all shadow-sm hover:scale-105" title="运营">
+                                <User size={12} strokeWidth={2} />
                             </button>
-                            <button onClick={() => handleOpenChat('售后', order)} className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white hover:bg-emerald-600 transition-all shadow-sm hover:scale-105" title="售后">
-                                <MessageCircle size={16} strokeWidth={2} />
+                            <button onClick={() => handleOpenChat('售后', order)} className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white hover:bg-emerald-600 transition-all shadow-sm hover:scale-105" title="售后">
+                                <MessageCircle size={12} strokeWidth={2} />
                             </button>
-                            <button onClick={() => handleOpenChat('群聊', order)} className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white hover:bg-purple-700 transition-all shadow-sm hover:scale-105" title="群聊">
-                                <Phone size={16} strokeWidth={2} />
+                            <button onClick={() => handleOpenChat('群聊', order)} className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-white hover:bg-purple-700 transition-all shadow-sm hover:scale-105" title="群聊">
+                                <Phone size={12} strokeWidth={2} />
                             </button>
                           </div>
                         </td>
